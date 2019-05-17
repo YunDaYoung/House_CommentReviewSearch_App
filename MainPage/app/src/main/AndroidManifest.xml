@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -21,6 +22,7 @@
         <activity android:name=".DetailHousePage" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".LoginPage" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".JoinPage" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".OwnerMypage" android:parentActivityName=".LoginPage"></activity>
     </application>
 
 </manifest>

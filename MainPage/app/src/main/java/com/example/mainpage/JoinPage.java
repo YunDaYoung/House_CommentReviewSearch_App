@@ -1,5 +1,6 @@
 package com.example.mainpage;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 
 public class JoinPage extends AppCompatActivity {
 
@@ -85,6 +87,7 @@ public class JoinPage extends AppCompatActivity {
         });
     }
 
+
     public class ServerConnect extends AsyncTask<String, String, String> {
 
         private String joinName;
@@ -99,12 +102,14 @@ public class JoinPage extends AppCompatActivity {
             this.joinSeparation = joinSeparation;
         }
 
+
         @Override
         protected String doInBackground(String... urls) {
             try {
 
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
+
                 jsonObject.accumulate("user_Name", joinName);
                 jsonObject.accumulate("user_Mail", joinMail);
                 jsonObject.accumulate("user_Password", joinPassword);
@@ -127,13 +132,19 @@ public class JoinPage extends AppCompatActivity {
                     con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
                     con.connect();
 
+
                     //서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
+
+
+
                     //버퍼를 생성하고 넣음
+
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
                     writer.write(jsonObject.toString());
                     writer.flush();
                     writer.close();//버퍼를 받아줌
+
 
                     InputStream stream = con.getInputStream();
 
@@ -175,10 +186,7 @@ public class JoinPage extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if(result == "1"){
-
-            }
-
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -38,8 +38,8 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         House house = data.get(position);
-        ImageView icon=(ImageView)convertView.findViewById(R.id.imageview);
-        icon.setImageResource(house.getHousePic());
+        ImageView pic=(ImageView)convertView.findViewById(R.id.imageview);
+        pic.setImageResource(house.getHousePic());
         TextView name1=(TextView)convertView.findViewById(R.id.text1);
         name1.setText("가격 : " + house.getHousePrice());
         TextView name2=(TextView)convertView.findViewById(R.id.text2);

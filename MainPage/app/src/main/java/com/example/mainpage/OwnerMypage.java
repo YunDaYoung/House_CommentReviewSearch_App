@@ -5,11 +5,13 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,53 +27,47 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class OwnerMypage extends AppCompatActivity {
+
     String url = "http://54.180.79.233:3000/recently";
     ArrayList<House> houseList = new ArrayList<House>();
 
-    //ArrayList<Integer> picArr = new ArrayList<>();
-    ArrayList<ListViewItem> listViewData = new ArrayList<>();
-    ListViewAdapter adapter;
+    OwnerMypageListViewAdapter adapter;
     ListView listView;
-    Button loginButton, joinButton;
-    ImageButton searchButton;
+    TextView ownerName;
+    Button logoutButton;
+    ScrollView sv;
 
-    JSONTask Json = new JSONTask();
+    JSONTask2 Json2 = new JSONTask2();
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.owner_mypage);
 
-        Json.execute(url);
+        Json2.execute(url);
 
         listView = (ListView) findViewById(R.id.listview);
-        searchButton = (ImageButton) findViewById(R.id.searchButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        joinButton = (Button) findViewById(R.id.joinButton);
+        logoutButton = (Button) findViewById(R.id.logoutButton);
+        ownerName = (TextView) findViewById(R.id.ownerName);
+        sv = (ScrollView) findViewById(R.id.sv);
 
-
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        listView.setOnTouchListener(new View.OnTouchListener() {        //리스트뷰 터취 리스너
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
-                startActivity(intent);
+            public boolean onTouch(View v, MotionEvent event) {
+                sv.requestDisallowInterceptTouchEvent(true);    // 리스트뷰에서 터취가되면 스크롤뷰만 움직이게
+                return false;
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginPage.class);
-                startActivity(intent);
-            }
-        });
 
-        joinButton.setOnClickListener(new View.OnClickListener() {
+        출처: https://ggari.tistory.com/161 [아리까리 김까리]
+
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, JoinPage.class);
+                Intent intent = new Intent(OwnerMypage.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -79,27 +75,22 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
+                Intent intent = new Intent(OwnerMypage.this, DetailHousePage.class);
                 startActivity(intent);
             }
         });
     }
 
-    public class JSONTask extends AsyncTask<String, String, String>{
+    public class JSONTask2 extends AsyncTask<String, String, String>{
+
         @Override
         protected String doInBackground(String... urls){
             try {
-                /*
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("user_id", "androidTest");
-                jsonObject.accumulate("name", "yun");*/
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
                 try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
                     URL url = new URL(urls[0]);//url을 가져온다.
 
                     con = (HttpURLConnection) url.openConnection();
@@ -163,9 +154,6 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONObject getKey= new JSONObject(result);
 
-                //picArr.add(R.drawable.house1);
-                //picArr.add(R.drawable.house2);
-
                 //Log.d("jsonObject: ", getKey.getString("data").toString());
                 JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
                 for(int i =0; i< jsonArray.length(); i++){
@@ -182,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
                     ));
                     Log.d("House" + i + ":", houseList.get(i).toString());
                 }
-                adapter = new ListViewAdapter(MainActivity.this, R.layout.item, houseList);
+                adapter = new OwnerMypageListViewAdapter(OwnerMypage.this, R.layout.owner_mypage_item, houseList);
                 listView.setAdapter(adapter);
 
             } catch (JSONException e) {
-
+                e.printStackTrace();
             }
 
         }
