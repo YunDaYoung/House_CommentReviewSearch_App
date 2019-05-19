@@ -75,14 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public class JSONTask extends AsyncTask<String, String, String>{
@@ -182,8 +174,19 @@ public class MainActivity extends AppCompatActivity {
                     ));
                     Log.d("House" + i + ":", houseList.get(i).toString());
                 }
+
                 adapter = new ListViewAdapter(MainActivity.this, R.layout.item, houseList);
                 listView.setAdapter(adapter);
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
+                        String hIdx = houseList.get(position).getHouseIdx();
+                        intent.putExtra("HouseIndex", hIdx);
+                        startActivity(intent);
+                    }
+                });
 
             } catch (JSONException e) {
 

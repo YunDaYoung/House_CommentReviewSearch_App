@@ -22,7 +22,7 @@
         <activity android:name=".DetailHousePage" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".LoginPage" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".JoinPage" android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".OwnerMypage" android:parentActivityName=".LoginPage"></activity>
+        <activity android:name=".OwnerMypage" android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

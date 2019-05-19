@@ -36,6 +36,7 @@ public class OwnerMypage extends AppCompatActivity {
     ListView listView;
     TextView ownerName;
     Button logoutButton;
+    Button deleteBtn, updateBtn;
     ScrollView sv;
 
     JSONTask2 Json2 = new JSONTask2();
@@ -60,15 +61,12 @@ public class OwnerMypage extends AppCompatActivity {
             }
         });
 
-
-        출처: https://ggari.tistory.com/161 [아리까리 김까리]
-
-
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OwnerMypage.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -76,6 +74,8 @@ public class OwnerMypage extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(OwnerMypage.this, DetailHousePage.class);
+                String hIdx = houseList.get(position).getHouseIdx();
+                intent.putExtra("HouseIndex", hIdx);
                 startActivity(intent);
             }
         });
@@ -83,100 +83,101 @@ public class OwnerMypage extends AppCompatActivity {
 
     public class JSONTask2 extends AsyncTask<String, String, String>{
 
-        @Override
-        protected String doInBackground(String... urls){
-            try {
+    @Override
+    protected String doInBackground(String... urls){
+        try {
 
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
+            HttpURLConnection con = null;
+            BufferedReader reader = null;
 
-                try{
-                    URL url = new URL(urls[0]);//url을 가져온다.
+            try{
+                URL url = new URL(urls[0]);//url을 가져온다.
 
-                    con = (HttpURLConnection) url.openConnection();
-                    con.setDoInput(true);
-                    con.connect();//연결 수행
+                con = (HttpURLConnection) url.openConnection();
+                con.setDoInput(true);
+                con.connect();//연결 수행
 
 
-                    //입력 스트림 생성
-                    InputStream stream = con.getInputStream();
+                //입력 스트림 생성
+                InputStream stream = con.getInputStream();
 
-                    //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
-                    reader = new BufferedReader(new InputStreamReader(stream));
+                //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
+                reader = new BufferedReader(new InputStreamReader(stream));
 
-                    //실제 데이터를 받는곳
-                    StringBuffer buffer = new StringBuffer();
+                //실제 데이터를 받는곳
+                StringBuffer buffer = new StringBuffer();
 
-                    //line별 스트링을 받기 위한 temp 변수
-                    String line = "";
+                //line별 스트링을 받기 위한 temp 변수
+                String line = "";
 
-                    //아래라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
-                    while((line = reader.readLine()) != null){
-                        buffer.append(line);
+                //아래라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
+                while((line = reader.readLine()) != null){
+                    buffer.append(line);
+                }
+
+                //다 가져오면 String 형변환을 수행한다. 이유는 protected String doInBackground(String... urls) 니까
+                return buffer.toString();
+
+                //아래는 예외처리 부분이다.
+            } catch (MalformedURLException e){
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                //종료가 되면 disconnect메소드를 호출한다.
+                if(con != null){
+                    con.disconnect();
+                }
+
+                try {
+                    //버퍼를 닫아준다.
+                    if(reader != null){
+                        reader.close();
                     }
-
-                    //다 가져오면 String 형변환을 수행한다. 이유는 protected String doInBackground(String... urls) 니까
-                    return buffer.toString();
-
-                    //아래는 예외처리 부분이다.
-                } catch (MalformedURLException e){
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    //종료가 되면 disconnect메소드를 호출한다.
-                    if(con != null){
-                        con.disconnect();
-                    }
-
-                    try {
-                        //버퍼를 닫아준다.
-                        if(reader != null){
-                            reader.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }//finally 부분
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        //doInBackground메소드가 끝나면 여기로 와서 텍스트뷰의 값을 바꿔준다.
-
-        @Override
-        public void onPostExecute(String result) {
-            super.onPostExecute(result);
-            //Log.d("recently", result);
-            try {
-                JSONObject getKey= new JSONObject(result);
-
-                //Log.d("jsonObject: ", getKey.getString("data").toString());
-                JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
-                for(int i =0; i< jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    houseList.add(new House(
-                            jsonObject.getString("houseIdx"),
-                            R.drawable.house1,
-                            jsonObject.getString("housePrice"),
-                            jsonObject.getString("houseSpace"),
-                            jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress"),
-                            jsonObject.getString("userMail")
-
-                    ));
-                    Log.d("House" + i + ":", houseList.get(i).toString());
                 }
-                adapter = new OwnerMypageListViewAdapter(OwnerMypage.this, R.layout.owner_mypage_item, houseList);
-                listView.setAdapter(adapter);
+            }//finally 부분
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+        return null;
+    }
+
+    //doInBackground메소드가 끝나면 여기로 와서 텍스트뷰의 값을 바꿔준다.
+
+    @Override
+    public void onPostExecute(String result) {
+        super.onPostExecute(result);
+        //Log.d("recently", result);
+        try {
+            JSONObject getKey= new JSONObject(result);
+
+            //Log.d("jsonObject: ", getKey.getString("data").toString());
+            JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
+            for(int i =0; i< jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                houseList.add(new House(
+                        jsonObject.getString("houseIdx"),
+                        R.drawable.house1,
+                        jsonObject.getString("housePrice"),
+                        jsonObject.getString("houseSpace"),
+                        jsonObject.getString("houseComment"),
+                        jsonObject.getString("houseAddress"),
+                        jsonObject.getString("userMail")
+
+                ));
+                Log.d("House" + i + ":", houseList.get(i).toString());
             }
 
+            adapter = new OwnerMypageListViewAdapter(OwnerMypage.this, R.layout.owner_mypage_item, houseList);
+            listView.setAdapter(adapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
     }
+}
 }

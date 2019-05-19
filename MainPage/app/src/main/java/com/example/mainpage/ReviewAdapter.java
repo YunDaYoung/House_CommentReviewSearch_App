@@ -6,19 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class OwnerMypageListViewAdapter extends BaseAdapter{
+public class ReviewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private ArrayList<House> data;
+    private ArrayList<Review> data;
     private int layout;
 
-    public OwnerMypageListViewAdapter(Context context, int layout, ArrayList<House> data){
+    public ReviewAdapter(Context context, int layout, ArrayList<Review> data){
         this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.data=data;
         this.layout=layout;
@@ -27,7 +26,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
     public int getCount(){return data.size();}
 
     @Override
-    public House getItem(int position){return data.get(position);}
+    public Review getItem(int position){return data.get(position);}
 
     @Override
     public long getItemId(int position){return position;}
@@ -38,20 +37,12 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
             convertView=inflater.inflate(layout,parent,false);
         }
 
-        House house = data.get(position);
-        ImageView pic=(ImageView)convertView.findViewById(R.id.imageview);
-        pic.setImageResource(house.getHousePic());
-
-        Button deleteBtn = (Button)convertView.findViewById(R.id.deleteBtn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        Review review = data.get(position);
+        TextView name1=(TextView)convertView.findViewById(R.id.reviewUserMail);
+        name1.setText("사용자 이메일 : " + review.getUser_mail());
+        TextView reviewText1=(TextView)convertView.findViewById(R.id.reviewText);
+        reviewText1.setText(review.getUser_review());
 
         return convertView;
     }
-
-
 }
