@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     public class JSONTask extends AsyncTask<String, String, String>{

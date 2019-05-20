@@ -36,7 +36,6 @@ public class OwnerMypage extends AppCompatActivity {
     ListView listView;
     TextView ownerName;
     Button logoutButton;
-    Button deleteBtn, updateBtn;
     ScrollView sv;
 
     JSONTask2 Json2 = new JSONTask2();
@@ -48,7 +47,7 @@ public class OwnerMypage extends AppCompatActivity {
 
         Json2.execute(url);
 
-        listView = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview2);
         logoutButton = (Button) findViewById(R.id.logoutButton);
         ownerName = (TextView) findViewById(R.id.ownerName);
         sv = (ScrollView) findViewById(R.id.sv);
@@ -67,16 +66,6 @@ public class OwnerMypage extends AppCompatActivity {
                 Intent intent = new Intent(OwnerMypage.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(OwnerMypage.this, DetailHousePage.class);
-                String hIdx = houseList.get(position).getHouseIdx();
-                intent.putExtra("HouseIndex", hIdx);
-                startActivity(intent);
             }
         });
     }
@@ -173,6 +162,16 @@ public class OwnerMypage extends AppCompatActivity {
 
             adapter = new OwnerMypageListViewAdapter(OwnerMypage.this, R.layout.owner_mypage_item, houseList);
             listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(OwnerMypage.this, DetailHousePage.class);
+                    String hIdx = houseList.get(position).getHouseIdx();
+                    intent.putExtra("HouseIndex", hIdx);
+                    startActivity(intent);
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();

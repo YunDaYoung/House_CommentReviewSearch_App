@@ -136,8 +136,6 @@ public class JoinPage extends AppCompatActivity {
                     //서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
 
-
-
                     //버퍼를 생성하고 넣음
 
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
@@ -145,20 +143,7 @@ public class JoinPage extends AppCompatActivity {
                     writer.flush();
                     writer.close();//버퍼를 받아줌
 
-
-                    InputStream stream = con.getInputStream();
-
-                    reader = new BufferedReader(new InputStreamReader(stream));
-
-                    StringBuffer buffer = new StringBuffer();
-
-                    String line = "";
-
-                    while((line = reader.readLine()) != null){
-                        buffer.append(line);
-                    }
-
-                    return buffer.toString();
+                    return "ok";
 
                 } catch (MalformedURLException e){
                     e.printStackTrace();
@@ -186,7 +171,13 @@ public class JoinPage extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+            if(result.equals("ok")) {
+                Intent intent = new Intent(JoinPage.this, LoginPage.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -63,8 +63,9 @@ public class DetailHousePage extends AppCompatActivity{
             logoutBtn = (Button) findViewById(R.id.logoutButton);
             sv2 = (ScrollView) findViewById(R.id.sv2);
 
-            String houseIdx = intent.getParcelableExtra("HouseIndex");
-            url = "http://54.180.79.233:3000/houseView" + houseIdx;
+            //String houseIdx = intent.getParcelableExtra("HouseIndex");
+            //url = "http://54.180.79.233:3000/houseView/:houseIdx";
+            url = "http://54.180.79.233:3000/recently";
 
             reviewOutput.execute(url);
 
@@ -76,16 +77,6 @@ public class DetailHousePage extends AppCompatActivity{
                     return false;
                 }
             });
-
-            logoutBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(DetailHousePage.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-
         }
     public class JSONTask3 extends AsyncTask<String, String, String> {
 

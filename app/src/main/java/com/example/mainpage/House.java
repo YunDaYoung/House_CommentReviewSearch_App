@@ -1,7 +1,5 @@
 package com.example.mainpage;
 
-import android.graphics.Bitmap;
-
 public class House {
     private String houseIdx;
     private int housePic;
