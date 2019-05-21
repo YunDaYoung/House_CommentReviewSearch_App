@@ -1,26 +1,19 @@
 package com.example.mainpage;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,6 +24,12 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
     private LayoutInflater inflater;
     private ArrayList<House> data;
     private int layout;
+
+    ImageView pic;
+    Bitmap bmImg;
+    DownloadImageTask task;
+
+    House house;
 
     public OwnerMypageListViewAdapter(Context context, int layout, ArrayList<House> data){
         this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -52,9 +51,10 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
             convertView=inflater.inflate(layout,parent,false);
         }
 
-        final House house = data.get(position);
+        house = data.get(position);
         ImageView pic=(ImageView)convertView.findViewById(R.id.imageview);
-        //pic.setImageResource(house.getHousePic());
+        new DownloadImageTask((ImageView) convertView.findViewById(R.id.imageview)).execute(("http://54.180.79.233:3000/" + house.getHousePic()));
+
 
         Button updateBtn = (Button)convertView.findViewById(R.id.updateBtn);
 
@@ -79,6 +79,30 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
         return convertView;
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 
     public class HouseDelete extends AsyncTask<String, String, String> {
         @Override

@@ -1,6 +1,8 @@
 package com.example.mainpage;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +48,8 @@ public class DetailHousePage extends AppCompatActivity{
     Button logoutBtn;
     ScrollView sv2;
 
+    Bitmap bmImg;
+
     JSONTask3 reviewOutput = new JSONTask3();
 
         @Override
@@ -54,7 +58,6 @@ public class DetailHousePage extends AppCompatActivity{
             setContentView(R.layout.detail_house);
 
             goodBtn = (CheckBox) findViewById(R.id.goodBtn1);
-            imageView = (ImageView) findViewById(R.id.h_image);
             price = (TextView) findViewById(R.id.price);
             address = (TextView) findViewById(R.id.address);
             space = (TextView) findViewById(R.id.space);
@@ -63,9 +66,8 @@ public class DetailHousePage extends AppCompatActivity{
             logoutBtn = (Button) findViewById(R.id.logoutButton);
             sv2 = (ScrollView) findViewById(R.id.sv2);
 
-            //String houseIdx = intent.getParcelableExtra("HouseIndex");
-            //url = "http://54.180.79.233:3000/houseView/:houseIdx";
-            url = "http://54.180.79.233:3000/recently";
+            String houseIdx = intent.getParcelableExtra("HouseIndex");
+            url = "http://54.180.79.233:3000/houseView/:" + houseIdx;
 
             reviewOutput.execute(url);
 
@@ -171,17 +173,6 @@ public class DetailHousePage extends AppCompatActivity{
                     Log.d("House" + i + ":", houseList.get(i).toString());
                 }
 
-                /*
-                JSONArray jsonArray2 = new JSONArray(getKey.getString("review").toString());
-                for(int i =0; i< jsonArray2.length(); i++){
-                    JSONObject jsonObject = jsonArray2.getJSONObject(i);
-                    reviewList.add(new Review(
-                            jsonObject.getString("user_Email"),
-                            jsonObject.getString("review")
-                    ));
-                    Log.d("Review" + i + ":", reviewList.get(i).toString());
-                }*/
-
                 reviewList.add(new Review("ydiosa98", "좋아용!"));
                 reviewList.add(new Review("윤다영", "좋아용!!"));
                 reviewList.add(new Review("dkgkrltlfgek", "좋아용!!!"));
@@ -189,9 +180,9 @@ public class DetailHousePage extends AppCompatActivity{
                 adapter = new ReviewAdapter(DetailHousePage.this, R.layout.reveiw_list_item, reviewList);
                 reviewListView.setAdapter(adapter);
 
-                //imageView.setImageResource(houseList.get(0).getHousePic());
+                new DownloadImageTask((ImageView)findViewById(R.id.h_image)).execute(("http://54.180.79.233:3000/" + houseList.get(0).getHousePic()));
                 price.setText(houseList.get(0).getHousePrice());
-                address.setText(houseList.get(0).getHouseAddress1() + houseList.get(0).getHouseAddress2() + houseList.get(0).getHouseAddress3());
+                address.setText(houseList.get(0).getHouseAddress1() + " " + houseList.get(0).getHouseAddress2() + " " + houseList.get(0).getHouseAddress3());
                 space.setText(houseList.get(0).getHouseSpace());
                 comment.setText(houseList.get(0).getHouseComment());
 
@@ -199,6 +190,31 @@ public class DetailHousePage extends AppCompatActivity{
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 }

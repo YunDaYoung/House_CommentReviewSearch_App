@@ -93,11 +93,6 @@ public class LoginPage extends AppCompatActivity {
             this.loginSeparation = loginSeparation;
         }
 
-
-
-
-
-
         @Override
         protected String doInBackground(String... urls) {
             try {
