@@ -25,7 +25,7 @@
                 android:textSize="30dp"
                 android:textStyle="bold"/>
             <CheckBox
-                android:id="@+id/ChkOwner"
+                android:id="@+id/ChkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"

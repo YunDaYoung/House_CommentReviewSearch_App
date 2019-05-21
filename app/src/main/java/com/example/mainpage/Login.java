@@ -5,6 +5,10 @@ public class Login{
     private String loginPassword;
     private boolean loginSeparation;
 
+    public Login(){
+
+    }
+
     public Login(String loginMail, String loginPassword, boolean loginSeparation){
         this.loginMail = loginMail;
         this.loginPassword = loginPassword;

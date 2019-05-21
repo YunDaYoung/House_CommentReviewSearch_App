@@ -23,18 +23,22 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="25dp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/ownerName"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="홍길동님" />
+                android:layout_gravity="right">
+                <TextView
+                    android:id="@+id/ownerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="홍길동님" />
 
-            <Button
-                android:id="@+id/logoutButton"
-                android:layout_width="wrap_content"
-                android:layout_height="58dp"
-                android:text="로그아웃" />
+                <Button
+                    android:id="@+id/logoutButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="58dp"
+                    android:text="로그아웃" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

@@ -1,6 +1,9 @@
 package com.example.mainpage;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
     JSONTask Json = new JSONTask();
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         Json.execute(url);
 
@@ -160,16 +163,18 @@ public class MainActivity extends AppCompatActivity {
                 //picArr.add(R.drawable.house2);
 
                 //Log.d("jsonObject: ", getKey.getString("data").toString());
-                JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
+                final JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
                 for(int i =0; i< jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     houseList.add(new House(
                             jsonObject.getString("houseIdx"),
-                            R.drawable.house1,
+                            jsonObject.getString("housePic"),
                             jsonObject.getString("housePrice"),
                             jsonObject.getString("houseSpace"),
                             jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress"),
+                            jsonObject.getString("houseAddress1"),
+                            jsonObject.getString("houseAddress2"),
+                            jsonObject.getString("houseAddress3"),
                             jsonObject.getString("userMail")
 
                     ));

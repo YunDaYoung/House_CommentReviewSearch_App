@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class OwnerMypage extends AppCompatActivity {
 
-    String url = "http://54.180.79.233:3000/recently";
+    String url = "http://54.180.79.233:3000/ownerMyPage/";
     ArrayList<House> houseList = new ArrayList<House>();
 
     OwnerMypageListViewAdapter adapter;
@@ -44,13 +44,16 @@ public class OwnerMypage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.owner_mypage);
-
-        Json2.execute(url);
+        Intent intent = getIntent();
+        User user = (User) intent.getSerializableExtra("session");
+        Json2.execute(url + user.getUserMail());
 
         listView = (ListView) findViewById(R.id.listview2);
         logoutButton = (Button) findViewById(R.id.logoutButton);
         ownerName = (TextView) findViewById(R.id.ownerName);
         sv = (ScrollView) findViewById(R.id.sv);
+
+        ownerName.setText(user.getUserName() + "님");
 
         listView.setOnTouchListener(new View.OnTouchListener() {        //리스트뷰 터취 리스너
             @Override
@@ -149,13 +152,14 @@ public class OwnerMypage extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 houseList.add(new House(
                         jsonObject.getString("houseIdx"),
-                        R.drawable.house1,
+                        jsonObject.getString("housePic"),
                         jsonObject.getString("housePrice"),
                         jsonObject.getString("houseSpace"),
                         jsonObject.getString("houseComment"),
-                        jsonObject.getString("houseAddress"),
+                        jsonObject.getString("houseAddress1"),
+                        jsonObject.getString("houseAddress2"),
+                        jsonObject.getString("houseAddress3"),
                         jsonObject.getString("userMail")
-
                 ));
                 Log.d("House" + i + ":", houseList.get(i).toString());
             }

@@ -158,11 +158,13 @@ public class DetailHousePage extends AppCompatActivity{
                     JSONObject jsonObject = jsonArray1.getJSONObject(i);
                     houseList.add(new House(
                             jsonObject.getString("houseIdx"),
-                            R.drawable.house1,
+                            jsonObject.getString("housePic"),
                             jsonObject.getString("housePrice"),
                             jsonObject.getString("houseSpace"),
                             jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress"),
+                            jsonObject.getString("houseAddress1"),
+                            jsonObject.getString("houseAddress2"),
+                            jsonObject.getString("houseAddress3"),
                             jsonObject.getString("userMail")
 
                     ));
@@ -187,13 +189,11 @@ public class DetailHousePage extends AppCompatActivity{
                 adapter = new ReviewAdapter(DetailHousePage.this, R.layout.reveiw_list_item, reviewList);
                 reviewListView.setAdapter(adapter);
 
-                imageView.setImageResource(houseList.get(0).getHousePic());
+                //imageView.setImageResource(houseList.get(0).getHousePic());
                 price.setText(houseList.get(0).getHousePrice());
-                address.setText(houseList.get(0).getHouseAddress());
+                address.setText(houseList.get(0).getHouseAddress1() + houseList.get(0).getHouseAddress2() + houseList.get(0).getHouseAddress3());
                 space.setText(houseList.get(0).getHouseSpace());
                 comment.setText(houseList.get(0).getHouseComment());
-
-
 
             } catch (JSONException e) {
                 e.printStackTrace();

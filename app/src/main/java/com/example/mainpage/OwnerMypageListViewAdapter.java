@@ -54,7 +54,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
 
         final House house = data.get(position);
         ImageView pic=(ImageView)convertView.findViewById(R.id.imageview);
-        pic.setImageResource(house.getHousePic());
+        //pic.setImageResource(house.getHousePic());
 
         Button updateBtn = (Button)convertView.findViewById(R.id.updateBtn);
 
@@ -69,7 +69,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://54.180.79.233:3000/houseDelete/:" + house.getHouseIdx();
+                String url = "http://54.180.79.233:3000/houseDelete/:" + house.getHouseIdx();   //인덱스 post로 보내주기
 
                 HouseDelete hd = new HouseDelete();
                 hd.execute(url);
@@ -92,6 +92,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
                     URL url = new URL(urls[0]);//url을 가져온다.
 
                     con = (HttpURLConnection) url.openConnection();
+                    con.setDoInput(true);
                     con.connect();//연결 수행
 
                     return null;
