@@ -1,6 +1,7 @@
 package com.example.mainpage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,9 +12,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,6 +64,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
 
 
         Button updateBtn = (Button)convertView.findViewById(R.id.updateBtn);
+        Log.d("houseIdx", house.getHouseIdx());
 
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +77,8 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://54.180.79.233:3000/houseDelete/:" + house.getHouseIdx();   //인덱스 post로 보내주기
+                String url = "http://54.180.79.233:3000/houseDelete/" + house.getHouseIdx();   //인덱스 post로 보내주기
+                Log.d("idx", house.getHouseIdx() + ":" + url);
 
                 HouseDelete hd = new HouseDelete();
                 hd.execute(url);
@@ -106,35 +115,54 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
 
     public class HouseDelete extends AsyncTask<String, String, String> {
         @Override
-        protected String doInBackground(String... urls){
+        protected String doInBackground(String... urls) {
             try {
+
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
-                try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
+                try {
                     URL url = new URL(urls[0]);//url을 가져온다.
 
                     con = (HttpURLConnection) url.openConnection();
                     con.setDoInput(true);
                     con.connect();//연결 수행
 
-                    return null;
+
+                    //입력 스트림 생성
+                    InputStream stream = con.getInputStream();
+
+                    //속도를 향상시키고 부하를 줄이기 위한 버퍼를 선언한다.
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    //실제 데이터를 받는곳
+                    StringBuffer buffer = new StringBuffer();
+
+                    //line별 스트링을 받기 위한 temp 변수
+                    String line = "";
+
+                    //아래라인은 실제 reader에서 데이터를 가져오는 부분이다. 즉 node.js서버로부터 데이터를 가져온다.
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    //다 가져오면 String 형변환을 수행한다. 이유는 protected String doInBackground(String... urls) 니까
+                    return buffer.toString();
 
                     //아래는 예외처리 부분이다.
-                } catch (MalformedURLException e){
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
                     //종료가 되면 disconnect메소드를 호출한다.
-                    if(con != null){
+                    if (con != null) {
                         con.disconnect();
                     }
 
                     try {
                         //버퍼를 닫아준다.
-                        if(reader != null){
+                        if (reader != null) {
                             reader.close();
                         }
                     } catch (IOException e) {
@@ -153,7 +181,14 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
         @Override
         public void onPostExecute(String result) {
             super.onPostExecute(result);
-
+            try {
+                JSONObject postData = new JSONObject(result);
+                if (postData.getString("result").equals("1")) {
+                } else {
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

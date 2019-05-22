@@ -13,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HouseRegister"></activity>
-        <activity android:name=".ReviewRegister" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +31,9 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".OwnerMypage"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".LoginPage" />
+        <activity android:name=".HouseRegister"
+            android:parentActivityName=".OwnerMypage"/>
     </application>
 
 </manifest>

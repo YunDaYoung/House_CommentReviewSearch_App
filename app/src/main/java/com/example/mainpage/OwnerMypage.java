@@ -35,8 +35,11 @@ public class OwnerMypage extends AppCompatActivity {
     OwnerMypageListViewAdapter adapter;
     ListView listView;
     TextView ownerName;
-    Button logoutButton;
+    Button logoutButton, houseRegisterBtn;
     ScrollView sv;
+
+    Intent intent;
+    User user;
 
     JSONTask2 Json2 = new JSONTask2();
 
@@ -44,12 +47,14 @@ public class OwnerMypage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.owner_mypage);
-        Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra("session");
+
+        intent = getIntent();
+        user = (User) intent.getSerializableExtra("session");
         Json2.execute(url + user.getUserMail());
 
         listView = (ListView) findViewById(R.id.listview2);
         logoutButton = (Button) findViewById(R.id.logoutButton);
+        houseRegisterBtn = (Button) findViewById(R.id.h_regiestButton);
         ownerName = (TextView) findViewById(R.id.ownerName);
         sv = (ScrollView) findViewById(R.id.sv);
 
@@ -67,6 +72,16 @@ public class OwnerMypage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OwnerMypage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        houseRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OwnerMypage.this, HouseRegister.class);
+                intent.putExtra("session", user);
                 startActivity(intent);
                 finish();
             }
