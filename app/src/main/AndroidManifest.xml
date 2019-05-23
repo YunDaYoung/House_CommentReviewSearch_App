@@ -31,9 +31,11 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".OwnerMypage"
-            android:parentActivityName=".LoginPage" />
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".HouseRegister"
-            android:parentActivityName=".OwnerMypage"/>
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".HouseUpdate"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

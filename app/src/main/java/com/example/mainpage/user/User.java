@@ -1,4 +1,4 @@
-package com.example.mainpage;
+package com.example.mainpage.user;
 
 import java.io.Serializable;
 

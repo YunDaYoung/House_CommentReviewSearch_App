@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sv"
+    android:id="@+id/ow"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
     android:fillViewport="true">
@@ -59,7 +59,7 @@
                 android:layout_height="58dp"
                 android:layout_width="100dp"
                 android:text="집 등록하기"
-                android:id="@+id/h_regiestButton"/>
+                android:id="@+id/houseRegiestButton"/>
         </LinearLayout>
         <LinearLayout
             android:layout_height="fill_parent"

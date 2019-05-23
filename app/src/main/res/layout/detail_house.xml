@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/goodBtn1"
@@ -41,6 +41,16 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="좋아요" />
+                        <Button
+                            android:id="@+id/houseUpdateBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="집 수정"/>
+                        <Button
+                            android:id="@+id/houseDeleteBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="집 삭제"/>
                 </LinearLayout>
 
                 <LinearLayout

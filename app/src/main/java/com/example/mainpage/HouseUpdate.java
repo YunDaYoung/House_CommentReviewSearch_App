@@ -2,8 +2,8 @@ package com.example.mainpage;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,15 +24,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class HouseRegister extends AppCompatActivity {
+public class HouseUpdate extends AppCompatActivity {
     EditText price, address1, address2, address3, space, comment;
     Button btn1;
+    String houseIdx;
     String userMail;
+    House house;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_house_register);
+        setContentView(R.layout.activity_house_update);
 
         price = (EditText) findViewById(R.id.price1);
         address1 = (EditText) findViewById(R.id.address1);
@@ -42,7 +44,10 @@ public class HouseRegister extends AppCompatActivity {
         comment = (EditText) findViewById(R.id.comment1);
         btn1 = (Button) findViewById(R.id.btn1);
 
-        final House house = new House();
+        house = new House();
+
+        Intent intent = getIntent();
+        house.setHouseIdx(intent.getExtras().getString("HouseIndex"));
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +59,12 @@ public class HouseRegister extends AppCompatActivity {
                 house.setHouseAddress3(address3.getText().toString());
                 house.setHouseSpace(space.getText().toString());
                 house.setHouseComment(comment.getText().toString());
-                userMail = SaveSharedPreference.getUserMail(HouseRegister.this);
 
-                new ServerConnect(house).execute("http://54.180.79.233:3000/houseRegister"); //AsyncTask 시작시킴
+                userMail = SaveSharedPreference.getUserMail(HouseUpdate.this);
+
+                Log.d("data :", house.toString());
+
+                new ServerConnect(house).execute("http://54.180.79.233:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
             }
         });
     }
@@ -65,11 +73,19 @@ public class HouseRegister extends AppCompatActivity {
 
         House input;
 
+//        public ServerConnect(String pic, String price, String space, String comment, String address1, String address2, String address3, String userMail){
+//            this.pic = pic;
+//            this.price = price;
+//            this.space = space;
+//            this.comment = comment;
+//            this.address1 = address1;
+//            this.address2 = address2;
+//            this.address3 = address3;
+//            this.userMail = userMail;
+//        }
         public ServerConnect(House house){
             this.input = house;
-
         }
-
         @Override
         protected String doInBackground(String... urls) {
             try {
@@ -77,6 +93,7 @@ public class HouseRegister extends AppCompatActivity {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
 
+                jsonObject.accumulate("houseIdx",input.getHouseIdx());
                 jsonObject.accumulate("housePic", input.getHousePic());
                 jsonObject.accumulate("housePrice", input.getHousePrice());
                 jsonObject.accumulate("houseSpace", input.getHouseSpace());
@@ -104,6 +121,8 @@ public class HouseRegister extends AppCompatActivity {
 
                     con.setDoInput(true);
                     con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
+
+
                     con.connect();
 
                     //서버로 보내기위해서 스트림 만듬
@@ -153,19 +172,20 @@ public class HouseRegister extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Log.d("postData", result);
 
-            try {
-                JSONObject postData = new JSONObject(result);
-                if(postData.getString("result").equals("1")) {
-                    Intent intent = new Intent(HouseRegister.this, OwnerMypage.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "등록 실패", Toast.LENGTH_SHORT).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                JSONObject postData = new JSONObject(result);
+//                if(postData.getString("result").equals("1")) {
+//                    Intent intent = new Intent(HouseUpdate.this, OwnerMypage.class);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }

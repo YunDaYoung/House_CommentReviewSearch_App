@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mainpage.user.User;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -175,10 +177,16 @@ public class LoginPage extends AppCompatActivity {
                 if(postData.getString("result").equals("1")) {
                     JSONObject data = new JSONObject(postData.getString("data"));
                     Intent intent = new Intent(getApplicationContext(), OwnerMypage.class);
+
+
                     User user = new User(data.getString("userMail"),
                             data.getString("userName"),
                             data.getString("userCheck"));
-                    intent.putExtra("session", user);
+                    SaveSharedPreference.setUserMail(LoginPage.this , user.getUserMail());
+                    SaveSharedPreference.setUserName(LoginPage.this , user.getUserName());
+                    SaveSharedPreference.setUserCheck(LoginPage.this , user.getUserCheck());
+
+//                    intent.putExtra("session", user);
                     startActivity(intent);
                     finish();
                 } else {
