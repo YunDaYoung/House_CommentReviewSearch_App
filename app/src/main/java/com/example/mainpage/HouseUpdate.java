@@ -34,7 +34,7 @@ public class HouseUpdate extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_house_update);
+        setContentView(R.layout.activity_house_register);
 
         price = (EditText) findViewById(R.id.price1);
         address1 = (EditText) findViewById(R.id.address1);
@@ -52,7 +52,7 @@ public class HouseUpdate extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                house.setHousePic(null);
+                house.setHousePic("");
                 house.setHousePrice(price.getText().toString());
                 house.setHouseAddress1(address1.getText().toString());
                 house.setHouseAddress2(address2.getText().toString());
@@ -122,7 +122,6 @@ public class HouseUpdate extends AppCompatActivity {
                     con.setDoInput(true);
                     con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
 
-
                     con.connect();
 
                     //서버로 보내기위해서 스트림 만듬
@@ -132,6 +131,11 @@ public class HouseUpdate extends AppCompatActivity {
                     writer.write(jsonObject.toString());
                     writer.flush();
                     writer.close();//버퍼를 받아줌
+
+                    if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        Log.d("Error", "http response code is " + con.getResponseCode());
+                        return null;
+                    }
 
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
@@ -174,18 +178,18 @@ public class HouseUpdate extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("postData", result);
 
-//            try {
-//                JSONObject postData = new JSONObject(result);
-//                if(postData.getString("result").equals("1")) {
-//                    Intent intent = new Intent(HouseUpdate.this, OwnerMypage.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                JSONObject postData = new JSONObject(result);
+                if(postData.getString("result").equals("1")) {
+                    Intent intent = new Intent(HouseUpdate.this, OwnerMypage.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

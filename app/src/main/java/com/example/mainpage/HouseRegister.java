@@ -29,6 +29,9 @@ public class HouseRegister extends AppCompatActivity {
     Button btn1;
     String userMail;
 
+    House house;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,7 @@ public class HouseRegister extends AppCompatActivity {
         comment = (EditText) findViewById(R.id.comment1);
         btn1 = (Button) findViewById(R.id.btn1);
 
-        final House house = new House();
+        house = new House();
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override

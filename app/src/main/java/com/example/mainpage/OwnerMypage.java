@@ -51,6 +51,8 @@ public class OwnerMypage extends AppCompatActivity {
         houseRegiestButton = (Button) findViewById(R.id.houseRegiestButton);
         ownerName = (TextView) findViewById(R.id.ownerName);
         ow = (ScrollView) findViewById(R.id.ow);
+        ownerName.setText(SaveSharedPreference.getUserName(OwnerMypage.this) + "님");
+
         Json2.execute(url + SaveSharedPreference.getUserMail(OwnerMypage.this));
         ow.requestDisallowInterceptTouchEvent(true);
 
