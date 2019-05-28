@@ -18,31 +18,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10dp">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시/도 입력" />
-
         <EditText
             android:id="@+id/address1"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
-            android:imeOptions="actionNext"
-            android:maxLines="1"
-            android:singleLine="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="구/군/시 입력" />
-
-        <EditText
-            android:id="@+id/address2"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:maxLines="1"
@@ -50,11 +34,27 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="구/군/시 입력" />
+        <EditText
+            android:id="@+id/address2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,13 +62,11 @@
         <EditText
             android:id="@+id/address3"
             android:maxLines="1"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:imeOptions="actionNext"/>
-
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -79,37 +77,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가격" />
-
-        <Spinner
-            android:id="@+id/price1"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/price1"></Spinner>
+            android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/price1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/price1"></Spinner>
 
-        <Spinner
-            android:id="@+id/price2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/price2"></Spinner>
-
-
+            <Spinner
+                android:id="@+id/price2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/price2"></Spinner>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="면적" />
-
-        <Spinner
-            android:id="@+id/area1"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/area1"></Spinner>
+            android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/area1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/area1"></Spinner>
 
-        <Spinner
-            android:id="@+id/area2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/area2"></Spinner>
-
+            <Spinner
+                android:id="@+id/area2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/area2"></Spinner>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

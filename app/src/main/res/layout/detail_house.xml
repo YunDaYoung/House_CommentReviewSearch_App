@@ -139,17 +139,23 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:layout_margin="20dp">
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:layout_width="match_parent"
-                            android:textColor="#f000"
-                            android:textSize="20dp"
-                            android:text="리뷰목록"/>
-                        <Button
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="리뷰등록"
-                            android:id="@+id/reviewRegistBtn"/>
+                            android:orientation="horizontal">
+                                <TextView
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:textColor="#f000"
+                                    android:paddingRight="10dp"
+                                    android:textSize="20dp"
+                                    android:text="리뷰목록"/>
+                                <Button
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="리뷰등록"
+                                    android:id="@+id/reviewRegistBtn"/>
+                        </LinearLayout>
                         <ListView
                             android:layout_height="wrap_content"
                             android:layout_width="fill_parent"

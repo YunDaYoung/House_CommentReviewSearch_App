@@ -52,7 +52,7 @@ public class OwnerMypage extends AppCompatActivity {
         Json2.execute(url + SaveSharedPreference.getUserMail(OwnerMypage.this));
         ow.requestDisallowInterceptTouchEvent(true);
 
-        ownerName.setText(SaveSharedPreference.getUserMail(OwnerMypage.this) + "님");
+        ownerName.setText(SaveSharedPreference.getUserName(OwnerMypage.this) + "님");
 
         houseRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
