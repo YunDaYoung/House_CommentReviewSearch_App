@@ -31,7 +31,6 @@ public class SaveSharedPreference {
         editor.putString(PREF_USER_NAME, userName);
         editor.commit();
     }
-
     // 이름 정보 가져오기
     public static String getUserName(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
@@ -43,17 +42,16 @@ public class SaveSharedPreference {
         editor.putString(PREF_USER_CHECK, userCheck);
         editor.commit();
     }
-
     // 체크 정보 가져오기
     public static String getUserCheck(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_CHECK ,"");
     }
-
-
     // 로그아웃
+
     public static void clearUserName(Context ctx) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.clear();
         editor.commit();
     }
+
 }

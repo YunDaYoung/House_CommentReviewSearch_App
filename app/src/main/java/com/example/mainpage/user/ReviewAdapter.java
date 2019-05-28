@@ -1,12 +1,17 @@
-package com.example.mainpage;
+package com.example.mainpage.user;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mainpage.House;
+import com.example.mainpage.R;
 import com.example.mainpage.user.Review;
 
 import java.util.ArrayList;
@@ -36,12 +41,27 @@ public class ReviewAdapter extends BaseAdapter {
         if(convertView==null){
             convertView=inflater.inflate(layout,parent,false);
         }
-
         Review review = data.get(position);
-        TextView name1=(TextView)convertView.findViewById(R.id.reviewUserMail);
-        name1.setText("사용자 이메일 : " + review.getUser_mail());
-        TextView reviewText1=(TextView)convertView.findViewById(R.id.reviewText);
-        reviewText1.setText(review.getUser_review());
+        TextView text1=(TextView)convertView.findViewById(R.id.rwText1);
+        text1.setText("리뷰 내용 : " + review.getUser_review());
+
+        Button updateBtn = (Button)convertView.findViewById(R.id.rwUpdateBtn);
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        Button deleteBtn = (Button)convertView.findViewById(R.id.rwDeleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
 
         return convertView;
     }

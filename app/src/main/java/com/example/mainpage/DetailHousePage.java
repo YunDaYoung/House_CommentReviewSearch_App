@@ -17,41 +17,43 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mainpage.user.Like;
 import com.example.mainpage.user.Review;
+import com.example.mainpage.user.ReviewAdapter;
+import com.example.mainpage.user.UserMypage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class DetailHousePage extends AppCompatActivity{
-
     String url;
-
-    ArrayList<House> houseList = new ArrayList<House>();
+    String idx;
+//    ArrayList<House> houseList = new ArrayList<House>();
+    House house = new House();
     ArrayList<Review> reviewList = new ArrayList<Review>();
-
     ReviewAdapter adapter;
-    CheckBox goodBtn;
+    Button goodBtn;
     ImageView imageView;
     TextView price, address, space, comment;
     ListView reviewListView;
-    // Button logoutBtn;
+   // Button logoutBtn;
     Button houseDeleteBtn, houseUpdateBtn;
     ScrollView sv2;
-
     Bitmap bmImg;
-
     String houseIdx;
-
     JSONTask3 reviewOutput = new JSONTask3();
 
     @Override
@@ -59,30 +61,34 @@ public class DetailHousePage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_house);
 
-        goodBtn = (CheckBox) findViewById(R.id.goodBtn1);
+        //String url = "http://54.180.79.233:3000/houseLike";
+        Intent intent1 = getIntent();
+        idx = intent1.getStringExtra("HouseIndex");
+
+        goodBtn = (Button) findViewById(R.id.goodBtn1);
         price = (TextView) findViewById(R.id.price);
         address = (TextView) findViewById(R.id.address);
         space = (TextView) findViewById(R.id.space);
         comment = (TextView) findViewById(R.id.comment);
         reviewListView = (ListView) findViewById(R.id.reviewListView);
+        //logoutBtn = (Button) findViewById(R.id.logoutButton);
         sv2 = (ScrollView) findViewById(R.id.sv2);
-        imageView = (ImageView)findViewById(R.id.h_image);
-
+        imageView = (ImageView)findViewById(R.id.h_image) ;
 
         houseDeleteBtn = (Button)findViewById(R.id.houseDeleteBtn) ;
         houseUpdateBtn = (Button)findViewById(R.id.houseUpdateBtn);
 
 
-        Intent intent1 = getIntent();
-        houseIdx = intent1.getExtras().getString("HouseIndex");
-        Log.d("Index", houseIdx);
-        url = "http://54.180.79.233:3000/houseView/" + houseIdx;
+        Intent intent0 = getIntent();
+        houseIdx = intent0.getExtras().getString("HouseIndex");
+        url = "http://13.125.87.255:3000/houseView/" + houseIdx;
+
 
 
         houseDeleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://54.180.79.233:3000/houseDelete/" + houseIdx;   //인덱스 post로 보내주기
+                String url = "http://13.125.87.255:3000/houseDelete/" + houseIdx;   //인덱스 post로 보내주기
                 Log.d("idx", houseIdx + ":" + url);
 
                 HouseDelete hd = new HouseDelete();
@@ -100,17 +106,21 @@ public class DetailHousePage extends AppCompatActivity{
             }
         });
 
-
         reviewOutput.execute(url);
 
         if(SaveSharedPreference.getUserName(DetailHousePage.this).length() != 0){
             if(SaveSharedPreference.getUserCheck(DetailHousePage.this).equals("1")){
                 goodBtn.setVisibility(View.INVISIBLE);
-          }
+
+
+
+            }
             else {
                 houseDeleteBtn.setVisibility(View.INVISIBLE);
                 houseUpdateBtn.setVisibility(View.INVISIBLE);
             }
+
+
         }
 
         if(SaveSharedPreference.getUserName(DetailHousePage.this).length() == 0){
@@ -119,13 +129,39 @@ public class DetailHousePage extends AppCompatActivity{
             houseUpdateBtn.setVisibility(View.INVISIBLE);
         }
 
-        reviewListView.setOnTouchListener(new View.OnTouchListener() {        //리스트뷰 터취 리스너
+        goodBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sv2.requestDisallowInterceptTouchEvent(true);    // 리스트뷰에서 터치가되면 스크롤뷰만 움직이게
-                return false;
+            public void onClick(View v) {
+                try {
+                    Like like = new Like();
+                    like.setUserMail(SaveSharedPreference.getUserMail(DetailHousePage.this));
+                    like.setHouseIdx(idx);
+                    like.setFavoriteCheck("1");
+                    Log.d("likeOBJ",like.toString());
+                    new DetailHousePage.ServerConnect((like.getUserMail()), (like.getHouseIdx()),(like.getFavoriteCheck())).execute("http://13.125.87.255:3000/houseLike");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    Intent intent2 = new Intent(DetailHousePage.this, UserMypage.class);
+                    startActivity(intent2);
+                }
+
             }
         });
+
+        /*
+        reviewRegistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d("houseindex",houseIdx);
+                Intent intent = new Intent(DetailHousePage.this, ReviewRegister.class);
+                intent.putExtra("HouseIndex",houseIdx);
+                startActivity(intent);
+
+            }
+        });*/
+
     }
 
 
@@ -204,31 +240,30 @@ public class DetailHousePage extends AppCompatActivity{
 
                 //Log.d("jsonObject: ", getKey.getString("data").toString());
                 JSONObject jsonObject1 = new JSONObject(getKey.getString("data").toString());
-                JSONArray jsonArray1 = new JSONArray(jsonObject1.getString("house"));
+
                 JSONArray jsonArray2 = new JSONArray(jsonObject1.getString("review"));
+                JSONObject houseObjet = new JSONObject(jsonObject1.getString("house"));
+                    house = new House(
+                            houseObjet.getString("houseIdx"),
+                            houseObjet.getString("housePic"),
+                            houseObjet.getString("housePrice"),
+                            houseObjet.getString("houseSpace"),
+                            houseObjet.getString("houseComment"),
+                            houseObjet.getString("houseAddress1"),
+                            houseObjet.getString("houseAddress2"),
+                            houseObjet.getString("houseAddress3"),
+                            houseObjet.getString("userMail")
 
-                for(int i =0; i< jsonArray1.length(); i++){
-                    JSONObject jsonObject = jsonArray1.getJSONObject(i);
-                    houseList.add(new House(
-                            jsonObject.getString("houseIdx"),
-                            jsonObject.getString("housePic"),
-                            jsonObject.getString("housePrice"),
-                            jsonObject.getString("houseSpace"),
-                            jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress1"),
-                            jsonObject.getString("houseAddress2"),
-                            jsonObject.getString("houseAddress3"),
-                            jsonObject.getString("userMail")
-
-                    ));
-                    Log.d("House" + i + ":", houseList.get(i).toString());
-                }
-                for(int i =0; i< jsonArray2.length(); i++){
+                    );
+                    Log.d("House: ", house.toString());
+            for(int i =0; i< jsonArray2.length(); i++){
                     JSONObject jsonObject = jsonArray2.getJSONObject(i);
                     reviewList.add(new Review(
                             jsonObject.getString("userMail"),
                             jsonObject.getString("reviewComment"),
                             jsonObject.getString("houseIdx")
+
+
                     ));
                     Log.d("Review" + i + ":", reviewList.get(i).toString());
                 }
@@ -238,11 +273,11 @@ public class DetailHousePage extends AppCompatActivity{
                 reviewListView.setAdapter(adapter);
 
 
-                new DownloadImageTask((ImageView)findViewById(R.id.h_image)).execute(("http://54.180.79.233:3000/" + houseList.get(0).getHousePic()));
-                price.setText(houseList.get(0).getHousePrice());
-                address.setText(houseList.get(0).getHouseAddress1() + " " + houseList.get(0).getHouseAddress2() + " " + houseList.get(0).getHouseAddress3());
-                space.setText(houseList.get(0).getHouseSpace());
-                comment.setText(houseList.get(0).getHouseComment());
+                new DownloadImageTask((ImageView)findViewById(R.id.h_image)).execute(("http://13.125.87.255:3000/" + house.getHousePic()));
+                price.setText(house.getHousePrice());
+                address.setText(house.getHouseAddress1() + " " + house.getHouseAddress2() + " " + house.getHouseAddress3());
+                space.setText(house.getHouseSpace());
+                comment.setText(house.getHouseComment());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -361,4 +396,113 @@ public class DetailHousePage extends AppCompatActivity{
             }
         }
     }
+
+    public class ServerConnect extends AsyncTask<String, String, String> {
+
+
+        private String userMail;
+        private String houseIdx;
+        private String favoriteCheck;
+
+
+        public ServerConnect(String userMail, String houseIdx, String favoriteCheck){
+            this.userMail = userMail;
+            this.houseIdx = houseIdx;
+            this.favoriteCheck = favoriteCheck;
+
+        }
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.accumulate("userMail", userMail);
+                jsonObject.accumulate("houseIdx", houseIdx);
+                jsonObject.accumulate("favoriteCheck", favoriteCheck);
+                Log.d("jsonObject", jsonObject.toString());
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try{
+                    URL url = new URL(urls[0]);
+
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+
+                    con.setRequestMethod("POST");       //POST방식으로 보냄
+//                    con.setRequestProperty("Cache-Control", "no-cache");        //캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");     //application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");     //서버에 response 데이터를 html로 받음
+                    con.setDoInput(true);
+                    con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
+                    con.connect();
+
+//서버로 보내기위해서 스트림 만듬
+                    OutputStream outStream = con.getOutputStream();
+                    //버퍼를 생성하고 넣음
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();//버퍼를 받아줌
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e){
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if(con != null){
+                        con.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d("postData", result);
+            try {
+                JSONObject postData = new JSONObject(result);
+                if(postData.getString("result").equals("1")) {
+                    Intent intent = new Intent(DetailHousePage.this, UserMypage.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "좋아요", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 }

@@ -1,101 +1,78 @@
-package com.example.mainpage;
+package com.example.mainpage.user;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.mainpage.user.SearchPage;
+import com.example.mainpage.DetailHousePage;
+import com.example.mainpage.House;
+import com.example.mainpage.Join;
+import com.example.mainpage.JoinPage;
+import com.example.mainpage.ListViewAdapter;
+import com.example.mainpage.ListViewItem;
+import com.example.mainpage.LoginPage;
+import com.example.mainpage.MainActivity;
+import com.example.mainpage.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    String url = "http://13.125.87.255:3000/recently";
-    ArrayList<House> houseList = new ArrayList<House>();
-
-    //ArrayList<Integer> picArr = new ArrayList<>();
-    ArrayList<ListViewItem> listViewData = new ArrayList<>();
-    ListViewAdapter adapter;
+public class UserListPage extends AppCompatActivity {
+    String url = "http://13.125.87.255:3000/reviewList";
+    Button rwUpdateBtn,rwDeleteBtn;
+    ArrayList<Review> reviewList = new ArrayList<Review>();
+    ReviewAdapter adapter;
     ListView listView;
-    Button loginButton, joinButton;
-    ImageButton searchButton;
-
     JSONTask Json = new JSONTask();
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.reveiw_list_item);
         Json.execute(url);
 
-        listView = (ListView) findViewById(R.id.listview);
-        searchButton = (ImageButton) findViewById(R.id.searchButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        joinButton = (Button) findViewById(R.id.joinButton);
+        rwUpdateBtn = (Button)findViewById(R.id.rwUpdateBtn) ;
+        rwDeleteBtn = (Button)findViewById(R.id.rwDeleteBtn) ;
 
-        /*
-       if(SaveSharedPreference.getUserName(MainActivity.this).length() != 0){
-           if(SaveSharedPreference.getUserCheck(MainActivity.this).equals("1")){
-               loginButton.setText("마이페이지");
-               joinButton.setVisibility(View.INVISIBLE);
-               searchButton.setVisibility(View.INVISIBLE);
-
-           }
-           else{
-               loginButton.setText("마이페이지");
-               joinButton.setVisibility(View.INVISIBLE);
-           }
-        }
-*/
-
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        //버튼 눌렀을 시
+        rwDeleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SearchPage.class);
-                startActivity(intent);
+                //ReviewDelete로
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        rwUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginPage.class);
-                startActivity(intent);
+                //ReviewUpdate로
             }
         });
-
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, JoinPage.class);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
+
 
     public class JSONTask extends AsyncTask<String, String, String>{
         @Override
@@ -182,36 +159,20 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
                 for(int i =0; i< jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    houseList.add(new House(
-                            jsonObject.getString("houseIdx"),
-                            jsonObject.getString("housePic"),
-                            jsonObject.getString("housePrice"),
-                            jsonObject.getString("houseSpace"),
-                            jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress1"),
-                            jsonObject.getString("houseAddress2"),
-                            jsonObject.getString("houseAddress3"),
-                            jsonObject.getString("userMail")
+                    reviewList.add(new Review(
+                            jsonObject.getString("user_mail"),
+                            jsonObject.getString("user_review"),
+                            jsonObject.getString("house_idx")
 
                     ));
-                    Log.d("House" + i + ":", houseList.get(i).toString());
+                    Log.d("Review" + i + ":", reviewList.get(i).toString());
                 }
 
-                adapter = new ListViewAdapter(MainActivity.this, R.layout.item, houseList);
+                adapter = new ReviewAdapter(UserListPage.this, R.layout.reveiw_list_item, reviewList);
                 listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
-                        String hIdx = houseList.get(position).getHouseIdx();
-                        intent.putExtra("HouseIndex", hIdx);
-                        startActivity(intent);
-                    }
-                });
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (JSONException e) {
 
             }
 

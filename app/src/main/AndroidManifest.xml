@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mainpage">
 
+    <meta-data android:name = "android.max_aspect" android:value = "2.1"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".HouseUpdate"></activity>
+        <activity android:name=".HouseRegister" />
+        <activity android:name=".user.ReviewRegister" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,10 +36,12 @@
         <activity
             android:name=".OwnerMypage"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".HouseRegister"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".HouseUpdate"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".user.UserMypage"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".user.SearchPage"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

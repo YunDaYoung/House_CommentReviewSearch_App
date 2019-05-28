@@ -1,6 +1,7 @@
 package com.example.mainpage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -8,10 +9,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class OwnerMypageListViewAdapter extends BaseAdapter{
@@ -43,7 +57,7 @@ public class OwnerMypageListViewAdapter extends BaseAdapter{
         House house = data.get(position);
 
         house = data.get(position);
-        new DownloadImageTask((ImageView) convertView.findViewById(R.id.imageview)).execute(("http://54.180.79.233:3000/"+ house.getHousePic()));
+        new DownloadImageTask((ImageView) convertView.findViewById(R.id.imageview)).execute(("http://13.125.87.255:3000/"+ house.getHousePic()));
         TextView name1=(TextView)convertView.findViewById(R.id.text1);
         name1.setText("가격 : " + house.getHousePrice());
         TextView name2=(TextView)convertView.findViewById(R.id.text2);

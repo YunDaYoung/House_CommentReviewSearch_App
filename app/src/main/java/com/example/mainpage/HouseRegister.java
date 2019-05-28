@@ -59,7 +59,7 @@ public class HouseRegister extends AppCompatActivity {
                 house.setHouseComment(comment.getText().toString());
                 userMail = SaveSharedPreference.getUserMail(HouseRegister.this);
 
-                new ServerConnect(house).execute("http://54.180.79.233:3000/houseRegister"); //AsyncTask 시작시킴
+                new ServerConnect(house).execute("http://13.125.87.255:3000/houseRegister"); //AsyncTask 시작시킴
             }
         });
     }
@@ -172,3 +172,4 @@ public class HouseRegister extends AppCompatActivity {
         }
     }
 }
+

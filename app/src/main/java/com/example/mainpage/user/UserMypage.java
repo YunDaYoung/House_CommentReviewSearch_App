@@ -1,19 +1,24 @@
-package com.example.mainpage;
+package com.example.mainpage.user;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.mainpage.user.SearchPage;
+import com.example.mainpage.DetailHousePage;
+import com.example.mainpage.House;
+import com.example.mainpage.ListViewAdapter;
+import com.example.mainpage.MainActivity;
+import com.example.mainpage.R;
+import com.example.mainpage.SaveSharedPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,90 +33,76 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    String url = "http://13.125.87.255:3000/recently";
+public class UserMypage extends AppCompatActivity{
+    String url = "http://13.125.87.255:3000/userMypage/";
     ArrayList<House> houseList = new ArrayList<House>();
 
-    //ArrayList<Integer> picArr = new ArrayList<>();
-    ArrayList<ListViewItem> listViewData = new ArrayList<>();
     ListViewAdapter adapter;
-    ListView listView;
-    Button loginButton, joinButton;
-    ImageButton searchButton;
+    ListView listView3;
 
-    JSONTask Json = new JSONTask();
+
+    TextView ownerName3;
+    ImageButton searchBtn;
+    Button logoutButton3;
+    ScrollView user1;
+
+    JSONTask3 Json3 = new JSONTask3();
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-
-        Json.execute(url);
-
-        listView = (ListView) findViewById(R.id.listview);
-        searchButton = (ImageButton) findViewById(R.id.searchButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        joinButton = (Button) findViewById(R.id.joinButton);
-
-        /*
-       if(SaveSharedPreference.getUserName(MainActivity.this).length() != 0){
-           if(SaveSharedPreference.getUserCheck(MainActivity.this).equals("1")){
-               loginButton.setText("마이페이지");
-               joinButton.setVisibility(View.INVISIBLE);
-               searchButton.setVisibility(View.INVISIBLE);
-
-           }
-           else{
-               loginButton.setText("마이페이지");
-               joinButton.setVisibility(View.INVISIBLE);
-           }
-        }
-*/
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_mypage);
 
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        listView3 = (ListView) findViewById(R.id.listview3);
+        searchBtn = (ImageButton) findViewById(R.id.searchButton1);
+        logoutButton3 = (Button) findViewById(R.id.logoutButton3);
+        ownerName3 = (TextView) findViewById(R.id.ownerName3);
+        user1 = (ScrollView) findViewById(R.id.user);
+        Json3.execute(url + SaveSharedPreference.getUserMail(UserMypage.this));
+       // user1.requestDisallowInterceptTouchEvent(true);
+
+
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SearchPage.class);
+                Intent intent = new Intent(UserMypage.this, SearchPage.class);
                 startActivity(intent);
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        logoutButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginPage.class);
+                Intent intent = new Intent(UserMypage.this, MainActivity.class);
+                SaveSharedPreference.clearUserName(UserMypage.this);
                 startActivity(intent);
+                finish();
             }
         });
-
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, JoinPage.class);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
 
-    public class JSONTask extends AsyncTask<String, String, String>{
+    @Override
+    public void onBackPressed() {
+        if(SaveSharedPreference.getUserMail(UserMypage.this).length() != 0){
+            Intent intent = new Intent(UserMypage.this, MainActivity.class);
+            startActivity(intent);
+        }
+        super.onBackPressed();
+    }
+
+
+    public class JSONTask3 extends AsyncTask<String, String, String>{
+
         @Override
         protected String doInBackground(String... urls){
             try {
-                /*
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("user_id", "androidTest");
-                jsonObject.accumulate("name", "yun");*/
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
                 try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
                     URL url = new URL(urls[0]);//url을 가져온다.
 
                     con = (HttpURLConnection) url.openConnection();
@@ -175,11 +166,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JSONObject getKey= new JSONObject(result);
 
-                //picArr.add(R.drawable.house1);
-                //picArr.add(R.drawable.house2);
-
                 //Log.d("jsonObject: ", getKey.getString("data").toString());
-                JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
+
+
+                JSONArray jsonArray = new JSONArray(getKey.getString("data2").toString());
                 for(int i =0; i< jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     houseList.add(new House(
@@ -192,17 +182,16 @@ public class MainActivity extends AppCompatActivity {
                             jsonObject.getString("houseAddress2"),
                             jsonObject.getString("houseAddress3"),
                             jsonObject.getString("userMail")
-
                     ));
                     Log.d("House" + i + ":", houseList.get(i).toString());
                 }
 
-                adapter = new ListViewAdapter(MainActivity.this, R.layout.item, houseList);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                adapter = new ListViewAdapter(UserMypage.this, R.layout.item, houseList);
+                listView3.setAdapter(adapter);
+                listView3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(MainActivity.this, DetailHousePage.class);
+                        Intent intent = new Intent(UserMypage.this, DetailHousePage.class);
                         String hIdx = houseList.get(position).getHouseIdx();
                         intent.putExtra("HouseIndex", hIdx);
                         startActivity(intent);
@@ -210,11 +199,14 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
 
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
 
         }
     }
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ow"
+    android:id="@+id/rw"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
     android:fillViewport="true">
@@ -25,13 +25,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/ownerName2"
+                android:id="@+id/rwUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="홍길동님" />
 
             <Button
-                android:id="@+id/logoutButton2"
+                android:id="@+id/rwLogoutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="58dp"
                 android:text="로그아웃" />
@@ -48,14 +48,10 @@
                 android:textStyle="bold"
                 android:textSize="30dp"
                 android:textColor="#f000"
-                android:text="마이페이지"
+                android:text="리뷰 목록"
                 android:ems="8"
                 android:layout_marginLeft="10dp"/>
-            <Button
-                android:layout_height="58dp"
-                android:layout_width="100dp"
-                android:text="집 등록하기"
-                android:id="@+id/houseregiestBtn"/>
+
         </LinearLayout>
         <LinearLayout
             android:layout_height="fill_parent"
@@ -68,7 +64,7 @@
                 android:textSize="30dp"
                 android:text="내게시물"/>
             <ListView
-                android:id="@+id/listview2"
+                android:id="@+id/rwListview"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:choiceMode="singleChoice" />

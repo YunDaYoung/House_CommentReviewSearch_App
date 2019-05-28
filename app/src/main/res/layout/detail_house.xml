@@ -35,16 +35,17 @@
                     android:padding="10dp"
                     android:orientation="horizontal">
 
-                        <CheckBox
+                        <Button
                             android:id="@+id/goodBtn1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
                             android:text="좋아요" />
                         <Button
                             android:id="@+id/houseUpdateBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="95dp"
                             android:text="집 수정"/>
                         <Button
                             android:id="@+id/houseDeleteBtn"
@@ -144,6 +145,11 @@
                             android:textColor="#f000"
                             android:textSize="20dp"
                             android:text="리뷰목록"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="리뷰등록"
+                            android:id="@+id/reviewRegistBtn"/>
                         <ListView
                             android:layout_height="wrap_content"
                             android:layout_width="fill_parent"

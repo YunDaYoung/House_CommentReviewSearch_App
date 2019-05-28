@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mainpage.user.User;
+import com.example.mainpage.user.UserMypage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class LoginPage extends AppCompatActivity {
-
     Button joinBtn, loginBtn;
     EditText email,password;
     CheckBox chkBox;
@@ -37,7 +37,23 @@ public class LoginPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
+        //로그인 하면 여기 못오고 오너 페이지로
+        /*if(SaveSharedPreference.getUserName(LoginPage.this).length() != 0){
 
+                Intent intent = new Intent(LoginPage.this, OwnerMypage.class);
+                startActivity(intent);
+
+        }*/
+
+        if(SaveSharedPreference.getUserName(LoginPage.this).length() != 0){
+            if(SaveSharedPreference.getUserCheck(LoginPage.this).equals("1")){
+                Intent intent = new Intent(LoginPage.this, OwnerMypage.class);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(LoginPage.this, UserMypage.class);
+                startActivity(intent);
+            }
+        }
         final Login login = new Login();
 
         joinBtn = (Button) findViewById(R.id.joinButton);
@@ -75,7 +91,7 @@ public class LoginPage extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "비밀번호를 입력하시오", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    new ServerConnect((login.getLoginMail()), (login.getLoginPassword()),(login.getLoginSeparation())).execute("http://54.180.79.233:3000/login"); //AsyncTask 시작시킴
+                    new ServerConnect((login.getLoginMail()), (login.getLoginPassword()),(login.getLoginSeparation())).execute("http://13.125.87.255:3000/login"); //AsyncTask 시작시킴
                 }
 
             }
@@ -95,6 +111,11 @@ public class LoginPage extends AppCompatActivity {
             this.loginSeparation = loginSeparation;
         }
 
+
+
+
+
+
         @Override
         protected String doInBackground(String... urls) {
             try {
@@ -112,11 +133,14 @@ public class LoginPage extends AppCompatActivity {
                 try{
                     URL url = new URL(urls[0]);
 
+
+
+
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
 
                     con.setRequestMethod("POST");       //POST방식으로 보냄
-                    //con.setRequestProperty("Cache-Control", "no-cache");        //캐시 설정
+//                    con.setRequestProperty("Cache-Control", "no-cache");        //캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");     //application JSON 형식으로 전송
                     con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
 
@@ -124,7 +148,7 @@ public class LoginPage extends AppCompatActivity {
                     con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
                     con.connect();
 
-                    //서버로 보내기위해서 스트림 만듬
+//서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
                     //버퍼를 생성하고 넣음
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
@@ -176,8 +200,6 @@ public class LoginPage extends AppCompatActivity {
                 JSONObject postData = new JSONObject(result);
                 if(postData.getString("result").equals("1")) {
                     JSONObject data = new JSONObject(postData.getString("data"));
-                    Intent intent = new Intent(getApplicationContext(), OwnerMypage.class);
-
 
                     User user = new User(data.getString("userMail"),
                             data.getString("userName"),
@@ -186,8 +208,20 @@ public class LoginPage extends AppCompatActivity {
                     SaveSharedPreference.setUserName(LoginPage.this , user.getUserName());
                     SaveSharedPreference.setUserCheck(LoginPage.this , user.getUserCheck());
 
+                        if(SaveSharedPreference.getUserCheck(LoginPage.this).equals("1")){
+                            Intent intent = new Intent(getApplicationContext(), OwnerMypage.class);
+                            startActivity(intent);
+
+                        }
+                        else {
+                            Intent intent = new Intent(getApplicationContext(), UserMypage.class);
+                            startActivity(intent);
+                        }
+
+
+
 //                    intent.putExtra("session", user);
-                    startActivity(intent);
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();

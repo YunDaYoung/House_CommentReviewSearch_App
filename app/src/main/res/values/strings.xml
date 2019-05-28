@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">MainPage</string>
+    <string-array name="price1">
+        <item>0</item>
+        <item>100000001</item>
+        <item>200000001</item>
+        <item>300000001</item>
+        <item>400000001</item>
+    </string-array>
+    <string-array name="price2">
+        <item>100000000</item>
+        <item>200000000</item>
+        <item>300000000</item>
+        <item>400000000</item>
+        <item>500000000</item>
+    </string-array>
+
+    <string-array name="area1">
+        <item>0</item>
+        <item>21</item>
+        <item>41</item>
+        <item>61</item>
+        <item>101</item>
+    </string-array>
+
+    <string-array name="area2">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+        <item>100</item>
+        <item>150</item>
+
+    </string-array>
+
 </resources>

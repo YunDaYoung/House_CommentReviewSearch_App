@@ -1,15 +1,17 @@
-package com.example.mainpage;
-
+package com.example.mainpage.user;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.mainpage.DetailHousePage;
+import com.example.mainpage.R;
+import com.example.mainpage.SaveSharedPreference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,80 +27,44 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+public class ReviewRegister extends AppCompatActivity {
 
-public class JoinPage extends AppCompatActivity {
-
-    Button joinBtn;
-    EditText nameText, mailText, pwText;
-    CheckBox chkOwner;
-
-    boolean joinSeparation;
+    Review review1 = new Review();
+    EditText review;
+    Button reviewBtn;
+    String houseIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.join_page);
+        setContentView(R.layout.activity_review_register);
 
-        //Join클래스 객체 생성
-        final Join join = new Join();
+        review = (EditText) findViewById(R.id.review);
+        reviewBtn = (Button) findViewById(R.id.reviewBtn);
 
-        //변수에 아이디 값 지정
-        joinBtn = (Button) findViewById(R.id.JoinBtn);
+        Intent intent1 = getIntent();
+        houseIdx = intent1.getExtras().getString("HouseIndex");
+        Log.d("Index", houseIdx);
 
-        chkOwner = (CheckBox) findViewById(R.id.ChkOwner);
-
-        nameText = (EditText) findViewById(R.id.NameText);
-        mailText = (EditText) findViewById(R.id.MailText);
-        pwText = (EditText) findViewById(R.id.PWText);
-
-
-        //버튼 눌렀을 시
-        joinBtn.setOnClickListener(new View.OnClickListener() {
+        reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                join.setJoinName(nameText.getText().toString());
-                join.setJoinMail(mailText.getText().toString());
-                join.setJoinPassword(pwText.getText().toString());
+                review1.setHouse_idx(houseIdx);
+                review1.setUser_mail(SaveSharedPreference.getUserMail(ReviewRegister.this));
+                review1.setUser_review(review.getText().toString());
 
-                if(chkOwner.isChecked()==true) {
-                    joinSeparation = true;
-                }
-                else {
-                    joinSeparation = false;
-                }
-                join.setJoinSeparation(joinSeparation);
-
-                if((join.getJoinName()).equals("")){
-                    Toast.makeText(getApplicationContext(), "이름을 입력하시오", Toast.LENGTH_SHORT).show();
-                }
-                else if ((join.getJoinMail()).equals("")){
-                    Toast.makeText(getApplicationContext(), "이메일 주소를 입력하시오", Toast.LENGTH_SHORT).show();
-                }
-                else if ((join.getJoinPassword()).equals("")){
-                    Toast.makeText(getApplicationContext(), "비밀번호를 입력하시오", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    new ServerConnect((join.getJoinName()), (join.getJoinMail()), (join.getJoinPassword()), (join.getJoinSeparation())).execute("http://13.125.87.255:3000/join"); //AsyncTask 시작시킴
-                }
+                new ServerConnect(review1).execute("http://13.125.87.255:3000/reviewRegister");
             }
         });
     }
-
-
     public class ServerConnect extends AsyncTask<String, String, String> {
 
-        private String joinName;
-        private String joinMail;
-        private String joinPassword;
-        private boolean joinSeparation;
+        Review input;
 
-        public ServerConnect(String joinName, String joinMail, String joinPassword, boolean joinSeparation){
-            this.joinName = joinName;
-            this.joinMail = joinMail;
-            this.joinPassword = joinPassword;
-            this.joinSeparation = joinSeparation;
+        public ServerConnect(Review review){
+            this.input = review;
+
         }
-
 
         @Override
         protected String doInBackground(String... urls) {
@@ -107,11 +73,12 @@ public class JoinPage extends AppCompatActivity {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
 
-                jsonObject.accumulate("userName", joinName);
-                jsonObject.accumulate("userMail", joinMail);
-                jsonObject.accumulate("userPassword", joinPassword);
-                jsonObject.accumulate("userCheck", joinSeparation);
+                jsonObject.accumulate("userMail", input.getUser_mail());
+                jsonObject.accumulate("reviewComment", input.getUser_review());
+                jsonObject.accumulate("houseIdx", input.getHouse_idx());
+
                 Log.d("jsonObject", jsonObject.toString());
+
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
@@ -122,14 +89,15 @@ public class JoinPage extends AppCompatActivity {
                     con = (HttpURLConnection) url.openConnection();
 
                     con.setRequestMethod("POST");       //POST방식으로 보냄
-//                    con.setRequestProperty("Cache-Control", "no-cache");        //캐시 설정
+                    //con.setRequestProperty("Cache-Control", "no-cache");        //캐시 설정
                     con.setRequestProperty("Content-Type", "application/json");     //application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");     //서버에 response 데이터를 html로 받음
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+
                     con.setDoInput(true);
                     con.setDoOutput(true);                              //Outstream으로 post 데이터를 넘겨주겠다는 의미
                     con.connect();
 
-//서버로 보내기위해서 스트림 만듬
+                    //서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
                     //버퍼를 생성하고 넣음
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
@@ -176,20 +144,20 @@ public class JoinPage extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.d("postData", result);
+
             try {
                 JSONObject postData = new JSONObject(result);
                 if(postData.getString("result").equals("1")) {
-                    Intent intent = new Intent(JoinPage.this, LoginPage.class);
+                    Intent intent = new Intent(ReviewRegister.this, DetailHousePage.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "등록 실패", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }
+

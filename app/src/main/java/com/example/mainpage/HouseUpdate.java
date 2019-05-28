@@ -64,7 +64,7 @@ public class HouseUpdate extends AppCompatActivity {
 
                 Log.d("data :", house.toString());
 
-                new ServerConnect(house).execute("http://54.180.79.233:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
+                new ServerConnect(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
             }
         });
     }
@@ -73,7 +73,7 @@ public class HouseUpdate extends AppCompatActivity {
 
         House input;
 
-//        public ServerConnect(String pic, String price, String space, String comment, String address1, String address2, String address3, String userMail){
+        //        public ServerConnect(String pic, String price, String space, String comment, String address1, String address2, String address3, String userMail){
 //            this.pic = pic;
 //            this.price = price;
 //            this.space = space;
