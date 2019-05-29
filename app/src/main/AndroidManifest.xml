@@ -15,10 +15,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".user.AfterSearch"></activity>
+        <activity android:name=".user.ReviewPage"></activity>
+        <activity android:name=".user.AfterSearch" />
         <activity android:name=".HouseUpdate" />
+        <activity android:name=".user.ReviewUpdate"/>
         <activity android:name=".HouseRegister" />
         <activity android:name=".user.ReviewRegister" />
         <activity android:name=".MainActivity">

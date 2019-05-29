@@ -11,25 +11,32 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="130dp"
-            android:text="리뷰 수정하기"
-            />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:id="@+id/reviewAddBtn"/>
+            android:layout_marginLeft="300dp"
+            android:text="리뷰삭제"
+            android:id="@+id/rwDeleteBtn"/>
     </LinearLayout>
-    <EditText
-        android:layout_width="400dp"
-        android:layout_height="200dp"
-        android:text="리뷰 글을 입력하세요"
-        android:id="@+id/reviewComments"
-        />
-
-
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리뷰 수정"
+            android:textSize="30dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:text="리뷰 글을 입력하세요"
+            android:id="@+id/reviewComments" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="리뷰수정"
+            android:id="@+id/rwUpdateBtn"/>
+    </LinearLayout>
 </LinearLayout>

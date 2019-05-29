@@ -71,12 +71,26 @@ public class SearchPage extends AppCompatActivity {
                     search.setPrice1("0");
                 }
 
+                else if (position == 1) {
+                    search.setPrice1("100000001");
+                }
 
+                else if (position == 2) {
+                    search.setPrice1("200000001");
+                }
+
+                else if (position == 3) {
+                    search.setPrice1("300000001");
+                }
+
+                else if (position == 4) {
+                    search.setPrice1("400000001");
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                search.setPrice1("0");
             }
         });
 
@@ -86,11 +100,27 @@ public class SearchPage extends AppCompatActivity {
                 if (position == 0) {
                     search.setPrice2("100000000");
                 }
+
+                else if (position == 1) {
+                    search.setPrice2("200000000");
+                }
+
+                else if (position == 2) {
+                    search.setPrice2("300000000");
+                }
+
+                else if (position == 3) {
+                    search.setPrice2("400000000");
+                }
+
+                else if (position == 4) {
+                    search.setPrice2("500000000");
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                search.setPrice2("500000000");
             }
         });
 
@@ -100,11 +130,27 @@ public class SearchPage extends AppCompatActivity {
                 if (position == 0) {
                     search.setArea1("0");
                 }
+
+                else if (position == 1) {
+                    search.setArea1("21");
+                }
+
+                else if (position == 2) {
+                    search.setArea1("41");
+                }
+
+                else if (position == 3) {
+                    search.setArea1("61");
+                }
+
+                else if (position == 4) {
+                    search.setArea1("101");
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                search.setArea1("0");
             }
         });
 
@@ -112,13 +158,29 @@ public class SearchPage extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
+                    search.setArea2("20");
+                }
+
+                else if (position == 1) {
+                    search.setArea2("40");
+                }
+
+                else if (position == 2) {
                     search.setArea2("60");
+                }
+
+                else if (position == 3) {
+                    search.setArea2("100");
+                }
+
+                else if (position == 4) {
+                    search.setArea2("150");
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                search.setArea2("150");
             }
         });
 

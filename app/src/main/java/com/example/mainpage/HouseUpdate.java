@@ -64,26 +64,16 @@ public class HouseUpdate extends AppCompatActivity {
 
                 Log.d("data :", house.toString());
 
-                new ServerConnect(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
+                new ServerConnect1(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
             }
         });
     }
 
-    public class ServerConnect extends AsyncTask<String, String, String> {
+    public class ServerConnect1 extends AsyncTask<String, String, String> {
 
         House input;
 
-        //        public ServerConnect(String pic, String price, String space, String comment, String address1, String address2, String address3, String userMail){
-//            this.pic = pic;
-//            this.price = price;
-//            this.space = space;
-//            this.comment = comment;
-//            this.address1 = address1;
-//            this.address2 = address2;
-//            this.address3 = address3;
-//            this.userMail = userMail;
-//        }
-        public ServerConnect(House house){
+        public ServerConnect1(House house){
             this.input = house;
         }
         @Override

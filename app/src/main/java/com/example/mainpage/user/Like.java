@@ -3,7 +3,7 @@ package com.example.mainpage.user;
 public class Like  {
     private String userMail;
     private String houseIdx;
-    private String favoriteCheck;
+    private String favoriteCheck = "0";
 
     public Like(){}
 

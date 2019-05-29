@@ -32,11 +32,12 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="450dp"
-            android:id="@+id/review" />
+            android:hint="리뷰 글을 입력하세요"
+            android:id="@+id/reviewComments" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="리뷰 등록하기"
-            android:id="@+id/reviewBtn"/>
+            android:id="@+id/reviewAddBtn"/>
     </LinearLayout>
 </LinearLayout>

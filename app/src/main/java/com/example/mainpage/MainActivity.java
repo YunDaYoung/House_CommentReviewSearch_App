@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<House> houseList = new ArrayList<House>();
 
     //ArrayList<Integer> picArr = new ArrayList<>();
-    ArrayList<ListViewItem> listViewData = new ArrayList<>();
+    //ArrayList<ListViewItem> listViewData = new ArrayList<>();
     ListViewAdapter adapter;
     ListView listView;
     Button loginButton, joinButton;

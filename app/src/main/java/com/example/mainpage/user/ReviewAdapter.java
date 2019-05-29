@@ -45,23 +45,6 @@ public class ReviewAdapter extends BaseAdapter {
         TextView text1=(TextView)convertView.findViewById(R.id.rwText1);
         text1.setText("리뷰 내용 : " + review.getUser_review());
 
-        Button updateBtn = (Button)convertView.findViewById(R.id.rwUpdateBtn);
-        updateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        Button deleteBtn = (Button)convertView.findViewById(R.id.rwDeleteBtn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-
 
         return convertView;
     }

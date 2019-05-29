@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.example.mainpage.user.Like;
 import com.example.mainpage.user.Review;
 import com.example.mainpage.user.ReviewAdapter;
+import com.example.mainpage.user.ReviewRegister;
+import com.example.mainpage.user.ReviewUpdate;
 import com.example.mainpage.user.UserMypage;
 
 import org.json.JSONArray;
@@ -41,7 +44,7 @@ import java.util.ArrayList;
 public class DetailHousePage extends AppCompatActivity{
     String url;
     String idx;
-//    ArrayList<House> houseList = new ArrayList<House>();
+
     House house = new House();
     ArrayList<Review> reviewList = new ArrayList<Review>();
     ReviewAdapter adapter;
@@ -49,11 +52,13 @@ public class DetailHousePage extends AppCompatActivity{
     ImageView imageView;
     TextView price, address, space, comment;
     ListView reviewListView;
-   // Button logoutBtn;
+    Button reviewRegistBtn;
     Button houseDeleteBtn, houseUpdateBtn;
-    ScrollView sv2;
+    //ScrollView sv2;
     Bitmap bmImg;
     String houseIdx;
+    Like like;
+
     JSONTask3 reviewOutput = new JSONTask3();
 
     @Override
@@ -72,12 +77,16 @@ public class DetailHousePage extends AppCompatActivity{
         comment = (TextView) findViewById(R.id.comment);
         reviewListView = (ListView) findViewById(R.id.reviewListView);
         //logoutBtn = (Button) findViewById(R.id.logoutButton);
-        sv2 = (ScrollView) findViewById(R.id.sv2);
+        //sv2 = (ScrollView) findViewById(R.id.sv2);
         imageView = (ImageView)findViewById(R.id.h_image) ;
+
+        reviewRegistBtn=(Button)findViewById(R.id.reviewRegistBtn);
+
 
         houseDeleteBtn = (Button)findViewById(R.id.houseDeleteBtn) ;
         houseUpdateBtn = (Button)findViewById(R.id.houseUpdateBtn);
 
+        like = new Like();
 
         Intent intent0 = getIntent();
         houseIdx = intent0.getExtras().getString("HouseIndex");
@@ -133,34 +142,33 @@ public class DetailHousePage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 try {
-                    Like like = new Like();
                     like.setUserMail(SaveSharedPreference.getUserMail(DetailHousePage.this));
                     like.setHouseIdx(idx);
                     like.setFavoriteCheck("1");
                     Log.d("likeOBJ",like.toString());
-                    new DetailHousePage.ServerConnect((like.getUserMail()), (like.getHouseIdx()),(like.getFavoriteCheck())).execute("http://13.125.87.255:3000/houseLike");
+                    new ServerConnect((like.getUserMail()), (like.getHouseIdx()),(like.getFavoriteCheck())).execute("http://13.125.87.255:3000/houseLike");
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    Intent intent2 = new Intent(DetailHousePage.this, UserMypage.class);
-                    startActivity(intent2);
-                }
-
+                        Intent intent2 = new Intent(DetailHousePage.this, UserMypage.class);
+                        startActivity(intent2);
+                    }
             }
         });
 
-        /*
+
         reviewRegistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Log.d("houseindex",houseIdx);
+                String houseIdx=house.getHouseIdx();
+                Log.d("houseIndex",houseIdx);
                 Intent intent = new Intent(DetailHousePage.this, ReviewRegister.class);
                 intent.putExtra("HouseIndex",houseIdx);
                 startActivity(intent);
 
             }
-        });*/
+        });
 
     }
 
@@ -238,11 +246,11 @@ public class DetailHousePage extends AppCompatActivity{
             try {
                 JSONObject getKey= new JSONObject(result);
 
-                //Log.d("jsonObject: ", getKey.getString("data").toString());
+                Log.d("jsonObject: ", getKey.getString("data").toString());
                 JSONObject jsonObject1 = new JSONObject(getKey.getString("data").toString());
-
                 JSONArray jsonArray2 = new JSONArray(jsonObject1.getString("review"));
                 JSONObject houseObjet = new JSONObject(jsonObject1.getString("house"));
+
                     house = new House(
                             houseObjet.getString("houseIdx"),
                             houseObjet.getString("housePic"),
@@ -253,18 +261,17 @@ public class DetailHousePage extends AppCompatActivity{
                             houseObjet.getString("houseAddress2"),
                             houseObjet.getString("houseAddress3"),
                             houseObjet.getString("userMail")
-
                     );
+
                     Log.d("House: ", house.toString());
-            for(int i =0; i< jsonArray2.length(); i++){
+                for(int i =0; i< jsonArray2.length(); i++){
                     JSONObject jsonObject = jsonArray2.getJSONObject(i);
                     reviewList.add(new Review(
                             jsonObject.getString("userMail"),
                             jsonObject.getString("reviewComment"),
                             jsonObject.getString("houseIdx")
-
-
                     ));
+
                     Log.d("Review" + i + ":", reviewList.get(i).toString());
                 }
 
