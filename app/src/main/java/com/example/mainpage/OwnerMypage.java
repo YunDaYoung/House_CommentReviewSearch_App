@@ -174,6 +174,12 @@ public class OwnerMypage extends AppCompatActivity {
                         jsonObject.getString("userMail")
                 ));
                 Log.d("House" + i + ":", houseList.get(i).toString());
+                if(houseList.get(i).getHouseIdx() != null){
+                    SaveSharedPreference.setHouseIdxData(OwnerMypage.this, houseList.get(i).getHouseIdx(), i);
+                }
+                else{
+                    SaveSharedPreference.setHouseIdxData(OwnerMypage.this, "", i);
+                }
             }
 
             adapter = new ListViewAdapter(OwnerMypage.this, R.layout.item, houseList);

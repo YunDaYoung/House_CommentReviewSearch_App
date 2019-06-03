@@ -14,66 +14,75 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="15dp"
+                android:layout_height="48dp"
+                android:ems="7"
                 android:text="ReviewHouse"
-                android:ems="6"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="#000000"
                 android:textSize="25dp"
                 android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/ownerName3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="홍길동님" />
 
-                <ImageButton
-                    android:id="@+id/searchButton1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    app:srcCompat="@android:drawable/ic_menu_search" />
-
-                <Button
-                    android:id="@+id/logoutButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:text="로그아웃" />
+            <TextView
+                android:id="@+id/ownerName3"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:text="홍길동님" />
+            <ImageButton
+                android:id="@+id/searchButton1"
+                android:layout_width="38dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="7dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/search" />
+            <Button
+                android:id="@+id/logoutButton3"
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:text="로그아웃" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_centerInParent="true"
+            android:background="#808080"/>
 
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_margin="20dp">
+
             <TextView
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textStyle="bold"
-                android:textSize="30dp"
-                android:textColor="#f000"
-                android:text="사용자 마이페이지"
-                android:ems="8"
-                android:layout_marginLeft="10dp"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="마이페이지_♡게시물"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
             <Button
-                android:layout_height="58dp"
+                android:id="@+id/reviewListButton"
                 android:layout_width="wrap_content"
-                android:text="리뷰 목록 보기"
-                android:id="@+id/reviewListButton"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="95dp"
+                android:text="리뷰목록" />
         </LinearLayout>
         <LinearLayout
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:layout_margin="20dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="30dp"
-                android:text="내게시물"/>
+
             <ListView
                 android:id="@+id/listview3"
                 android:layout_width="fill_parent"

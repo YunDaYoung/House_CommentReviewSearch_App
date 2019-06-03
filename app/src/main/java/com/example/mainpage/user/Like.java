@@ -13,6 +13,15 @@ public class Like  {
         this.favoriteCheck = favoriteCheck;
     }
 
+    public String likeOnOff(String likeData) {
+        if(likeData.equals("좋아요")){
+            return "좋아요 취소";
+        }
+        else{
+            return "좋아요";
+        }
+    }
+
     public String getUserMail() {
         return userMail;
     }

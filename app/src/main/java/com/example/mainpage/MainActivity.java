@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         joinButton = (Button) findViewById(R.id.joinButton);
 
-        /*
        if(SaveSharedPreference.getUserName(MainActivity.this).length() != 0){
            if(SaveSharedPreference.getUserCheck(MainActivity.this).equals("1")){
                loginButton.setText("마이페이지");
@@ -66,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                joinButton.setVisibility(View.INVISIBLE);
            }
         }
-*/
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {

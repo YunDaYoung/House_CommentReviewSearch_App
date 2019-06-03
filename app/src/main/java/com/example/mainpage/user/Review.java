@@ -34,6 +34,6 @@ public class Review {
 
     @Override
     public String toString() {
-        return "사용자 이메일 : " + user_mail + "\n" + "리뷰 내용 : " + user_review + "집 번호" + house_idx;
+        return "사용자 이메일 : " + user_mail + " " + "리뷰 내용 : " + user_review + " " + "집 번호 : " + house_idx;
     }
 }

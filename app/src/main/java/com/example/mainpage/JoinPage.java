@@ -178,13 +178,18 @@ public class JoinPage extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("postData", result);
             try {
-                JSONObject postData = new JSONObject(result);
-                if(postData.getString("result").equals("1")) {
-                    Intent intent = new Intent(JoinPage.this, LoginPage.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                if(result.equals("중복")){
+                    Toast.makeText(getApplicationContext(), "이미 존재하는 이메일 입니다. ", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    JSONObject postData = new JSONObject(result);
+                    if(postData.getString("result").equals("1")) {
+                        Intent intent = new Intent(JoinPage.this, LoginPage.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

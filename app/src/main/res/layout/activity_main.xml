@@ -9,41 +9,51 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"
             android:text="ReviewHouse"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="#000000"
             android:textSize="25dp"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/searchButton"
-            android:layout_width="64dp"
-            android:layout_height="56dp"
-            app:srcCompat="@android:drawable/ic_menu_search"
-            tools:layout_editor_absoluteX="154dp"
-            tools:layout_editor_absoluteY="18dp" />
+            android:layout_width="38dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/search" />
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="58dp"
-            android:text="로그인"
-            tools:layout_editor_absoluteX="219dp"
-            tools:layout_editor_absoluteY="26dp" />
+            android:layout_width="73dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="로그인" />
 
         <Button
             android:id="@+id/joinButton"
             android:layout_width="wrap_content"
-            android:layout_height="58dp"
-            android:text="회원가입"
-            tools:layout_editor_absoluteX="307dp"
-            tools:layout_editor_absoluteY="26dp" />
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="회원가입" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerInParent="true"
+        android:background="#808080"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:text="최근게시물"/>
         <ListView

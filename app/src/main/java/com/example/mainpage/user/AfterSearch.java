@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mainpage.DetailHousePage;
 import com.example.mainpage.House;
@@ -40,6 +42,7 @@ public class AfterSearch extends AppCompatActivity {
     ArrayList<House> houseList = new ArrayList<House>();
     ArrayList<Review> reviewList = new ArrayList<Review>();
     ImageButton searchBtn;
+    TextView userName;
     Button logoutBtn;
 
     String address1;
@@ -66,6 +69,9 @@ public class AfterSearch extends AppCompatActivity {
         searchBtn = (ImageButton) findViewById(R.id.searchButton0);
         logoutBtn = (Button) findViewById(R.id.logoutButton0);
         listView = (ListView) findViewById(R.id.listview0);
+        userName = (TextView) findViewById(R.id.ownerName0);
+
+        userName.setText(SaveSharedPreference.getUserName(AfterSearch.this) + "님");
 
         intent = getIntent();
 
@@ -208,35 +214,37 @@ public class AfterSearch extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.d("postData", result);
-
-
-
+            //Log.d("postData", result);
 
             try {
-                JSONObject getKey= new JSONObject(result);
+                if(result == null){
+                    Toast.makeText(getApplicationContext(), "검색된 집이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    JSONObject getKey= new JSONObject(result);
 
-                JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
-                for(int i =0; i< jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    houseList.add(new House(
-                            jsonObject.getString("houseIdx"),
-                            jsonObject.getString("housePic"),
-                            jsonObject.getString("housePrice"),
-                            jsonObject.getString("houseSpace"),
-                            jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress1"),
-                            jsonObject.getString("houseAddress2"),
-                            jsonObject.getString("houseAddress3"),
-                            jsonObject.getString("userMail")
+                    JSONArray jsonArray = new JSONArray(getKey.getString("data").toString());
+                    for(int i =0; i< jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        houseList.add(new House(
+                                jsonObject.getString("houseIdx"),
+                                jsonObject.getString("housePic"),
+                                jsonObject.getString("housePrice"),
+                                jsonObject.getString("houseSpace"),
+                                jsonObject.getString("houseComment"),
+                                jsonObject.getString("houseAddress1"),
+                                jsonObject.getString("houseAddress2"),
+                                jsonObject.getString("houseAddress3"),
+                                jsonObject.getString("userMail")
 
-                    ));
-                    reviewList.add(new Review(
-                            jsonObject.getString("userMail"),
-                            jsonObject.getString("reviewComment"),
-                            jsonObject.getString("houseIdx")
-                    ));
-                    Log.d("House" + i + ":", houseList.get(i).toString());
+                        ));
+                        reviewList.add(new Review(
+                                jsonObject.getString("userMail"),
+                                jsonObject.getString("reviewComment"),
+                                jsonObject.getString("houseIdx")
+                        ));
+                        Log.d("House" + i + ":", houseList.get(i).toString());
+                    }
                 }
 
                 adapter = new ListViewAdapter(AfterSearch.this, R.layout.item, houseList, reviewList);

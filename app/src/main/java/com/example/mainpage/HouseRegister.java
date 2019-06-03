@@ -34,6 +34,7 @@ public class HouseRegister extends AppCompatActivity {
     EditText price, address1, address2, address3, space, comment;
     Button picBtn, btn1;
     String userMail;
+    Boolean picEx = false;
 
     ImageView img;
     String path;
@@ -71,20 +72,44 @@ public class HouseRegister extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fileName1 = path.substring(path.lastIndexOf("/") + 1);
-                Log.d("fileName :", fileName1);
-
-                String urlString = "http://13.125.87.255:3000/houseRegisterPic";
-                DoFileUpload(urlString , path);
-
-                house.setHousePic(fileName1);
                 house.setHousePrice(price.getText().toString());
                 house.setHouseAddress1(address1.getText().toString());
                 house.setHouseAddress2(address2.getText().toString());
                 house.setHouseAddress3(address3.getText().toString());
                 house.setHouseSpace(space.getText().toString());
                 house.setHouseComment(comment.getText().toString());
-                userMail = SaveSharedPreference.getUserMail(HouseRegister.this);
+
+                Log.d("picEx :", picEx.toString());
+                if(picEx == false){
+                    Toast.makeText(getApplicationContext(), "사진을 넣으십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHousePrice().equals("")){
+                    Toast.makeText(getApplicationContext(), "가격을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress1().equals("")){
+                    Toast.makeText(getApplicationContext(), "지역(도·시)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress2().equals("")){
+                    Toast.makeText(getApplicationContext(), "지역(군·구)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress3().equals("")){
+                    Toast.makeText(getApplicationContext(), "지역(동·읍·면)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseSpace().equals("")){
+                    Toast.makeText(getApplicationContext(), "면적(평수)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    fileName1 = path.substring(path.lastIndexOf("/") + 1);
+                    house.setHousePic(fileName1);
+                    Log.d("fileName :", fileName1);
+
+                    String urlString = "http://13.125.87.255:3000/houseRegisterPic";
+                    DoFileUpload(urlString , path);
+
+                    userMail = SaveSharedPreference.getUserMail(HouseRegister.this);
+
+                    Log.d("data :", house.toString());
+                }
             }
         });
     }
@@ -213,7 +238,7 @@ public class HouseRegister extends AppCompatActivity {
                 if(postData.getString("result").equals("1")) {
                     new ServerConnect(house).execute("http://13.125.87.255:3000/houseRegister"); //AsyncTask 시작시킴
                 } else {
-                    Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "집등록 실패", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -341,6 +366,7 @@ public class HouseRegister extends AppCompatActivity {
                     path = getPathFromURI(uri);
                     img.setImageURI(data.getData());
                     img.setVisibility(View.VISIBLE);
+                    picEx = true;
                 }
         }
     }

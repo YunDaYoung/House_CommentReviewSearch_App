@@ -3,6 +3,7 @@ package com.example.mainpage;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.LocaleData;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,6 +61,8 @@ public class DetailHousePage extends AppCompatActivity{
     String houseIdx;
     Like like;
 
+    Boolean myHouse = false;
+
     JSONTask3 reviewOutput = new JSONTask3();
 
     @Override
@@ -85,6 +89,21 @@ public class DetailHousePage extends AppCompatActivity{
 
         houseDeleteBtn = (Button)findViewById(R.id.houseDeleteBtn) ;
         houseUpdateBtn = (Button)findViewById(R.id.houseUpdateBtn);
+
+        if(SaveSharedPreference.getUserCheck(DetailHousePage.this ).equals("0")){
+            for(int i = 0; i < 100; i++) {
+                if(SaveSharedPreference.getHouseIdxData(DetailHousePage.this, i).equals(idx)) {
+                    goodBtn.setText("좋아요 취소");
+                    Log.d("성공", "");
+                }
+            }
+        } else if (SaveSharedPreference.getUserCheck(DetailHousePage.this).equals("1")){
+            for(int i = 0; i < 100; i++) {
+                if(SaveSharedPreference.getHouseIdxData(DetailHousePage.this, i).equals(idx)) {
+                    myHouse = true;
+                }
+            }
+        }
 
         like = new Like();
 
@@ -120,8 +139,11 @@ public class DetailHousePage extends AppCompatActivity{
         if(SaveSharedPreference.getUserName(DetailHousePage.this).length() != 0){
             if(SaveSharedPreference.getUserCheck(DetailHousePage.this).equals("1")){
                 goodBtn.setVisibility(View.INVISIBLE);
-
-
+                reviewRegistBtn.setVisibility(View.INVISIBLE);
+                if(myHouse == false){
+                    houseDeleteBtn.setVisibility(View.INVISIBLE);
+                    houseUpdateBtn.setVisibility(View.INVISIBLE);
+                }
 
             }
             else {
@@ -136,6 +158,8 @@ public class DetailHousePage extends AppCompatActivity{
             goodBtn.setVisibility(View.INVISIBLE);
             houseDeleteBtn.setVisibility(View.INVISIBLE);
             houseUpdateBtn.setVisibility(View.INVISIBLE);
+            reviewRegistBtn.setVisibility(View.INVISIBLE);
+
         }
 
         goodBtn.setOnClickListener(new View.OnClickListener() {
@@ -145,14 +169,27 @@ public class DetailHousePage extends AppCompatActivity{
                     like.setUserMail(SaveSharedPreference.getUserMail(DetailHousePage.this));
                     like.setHouseIdx(idx);
                     like.setFavoriteCheck("1");
+                    if(goodBtn.getText().toString().equals("좋아요 취소")){
+                        for(int i = 0; i < 100; i++){
+                            if(SaveSharedPreference.getHouseIdxData(DetailHousePage.this, i).equals(idx)){
+                                SaveSharedPreference.setHouseIdxData(DetailHousePage.this, "", i);
+                            }
+                        }
+                    }
+                    else if (goodBtn.getText().toString().equals("좋아요")){
+                        for(int i = 0; i < 100; i++){
+                            if(SaveSharedPreference.getHouseIdxData(DetailHousePage.this, i).equals("")){
+                                SaveSharedPreference.setHouseIdxData(DetailHousePage.this, idx, i);
+                            }
+                        }
+                    }
+                    goodBtn.setText(like.likeOnOff(goodBtn.getText().toString()));
                     Log.d("likeOBJ",like.toString());
                     new ServerConnect((like.getUserMail()), (like.getHouseIdx()),(like.getFavoriteCheck())).execute("http://13.125.87.255:3000/houseLike");
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                        Intent intent2 = new Intent(DetailHousePage.this, UserMypage.class);
-                        startActivity(intent2);
-                    }
+                }
             }
         });
 
@@ -499,11 +536,9 @@ public class DetailHousePage extends AppCompatActivity{
             try {
                 JSONObject postData = new JSONObject(result);
                 if(postData.getString("result").equals("1")) {
-                    Intent intent = new Intent(DetailHousePage.this, UserMypage.class);
-                    startActivity(intent);
-                    finish();
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "좋아요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "좋아요 설정 실패", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -15,42 +15,46 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
                     android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_margin="15dp"
                             android:ems="8"
                             android:text="ReviewHouse"
-                            android:textColor="#f000"
+                            android:textColor="#000000"
                             android:textSize="25dp"
                             android:textStyle="bold" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_centerInParent="true"
+                    android:background="#808080"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:layout_margin="10dp"
                     android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/goodBtn1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
                             android:text="좋아요" />
                         <Button
                             android:id="@+id/houseUpdateBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="95dp"
-                            android:text="집 수정"/>
+                            android:text="집 수정"
+                            android:layout_marginLeft="110dp"/>
+
                         <Button
                             android:id="@+id/houseDeleteBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="집 삭제"/>
+                            android:text="집 삭제" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -59,9 +63,8 @@
                     android:layout_margin="10dp"
                     android:layout_gravity="center">
                         <ImageView
-                            android:layout_height="200dp"
-                            android:layout_width="240dp"
-                            android:layout_margin="10dp"
+                            android:layout_height="180dp"
+                            android:layout_width="216dp"
                             android:id="@+id/h_image"
                             android:background="@android:color/white"/>
                 </LinearLayout>
@@ -151,6 +154,7 @@
                                 <Button
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginLeft="200dp"
                                     android:text="리뷰등록"
                                     android:id="@+id/reviewRegistBtn"/>
                         </LinearLayout>

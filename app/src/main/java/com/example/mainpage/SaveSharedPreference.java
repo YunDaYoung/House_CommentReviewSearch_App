@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 public class SaveSharedPreference {
     static final String PREF_USER_NAME = "username";
     static final String PREF_USER_MAIL = "usermail";
@@ -45,6 +47,17 @@ public class SaveSharedPreference {
     // 체크 정보 가져오기
     public static String getUserCheck(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_USER_CHECK ,"");
+    }
+
+    // 체크 정보 저장
+    public static void setHouseIdxData(Context ctx, String houseIdxData, int index) {
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString("PREF_HOUSE_IDX" + index, houseIdxData);
+        editor.commit();
+    }
+    // 체크 정보 가져오기
+    public static String getHouseIdxData(Context ctx, int index) {
+        return getSharedPreferences(ctx).getString("PREF_HOUSE_IDX" + index ,"");
     }
     // 로그아웃
 

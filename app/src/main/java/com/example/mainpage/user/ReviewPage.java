@@ -57,6 +57,8 @@ public class ReviewPage extends AppCompatActivity {
         rw = (ScrollView) findViewById(R.id.rw);
         rwText1 = (TextView) findViewById(R.id.rwText1);
 
+        rwUserName.setText(SaveSharedPreference.getUserName(ReviewPage.this) + "님");
+
         Intent intent = getIntent();
         Json.execute(url + SaveSharedPreference.getUserMail(ReviewPage.this));
         rw.requestDisallowInterceptTouchEvent(true);

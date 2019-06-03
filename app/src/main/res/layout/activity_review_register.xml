@@ -4,40 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".user.ReviewRegister">
-
-    <TextView
+    tools:context=".user.ReviewRegister"
+    android:layout_margin="40dp"
+    android:orientation="vertical">
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:ems="8"
-        android:text="ReviewHouse"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="25dp"
-        android:textStyle="bold" />
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_margin="40dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:text="리뷰등록"
+            android:textSize="20dp"
             android:padding="10dp"
-            android:text="리뷰 등록"/>
-
-        <EditText
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="450dp"
-            android:hint="리뷰 글을 입력하세요"
-            android:id="@+id/reviewComments" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="리뷰 등록하기"
-            android:id="@+id/reviewAddBtn"/>
+            android:textStyle="bold"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerInParent="true"
+        android:background="#808080"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="리뷰 글을 입력하세요"
+        android:id="@+id/reviewComments" />
+
+    <Button
+        android:id="@+id/reviewAddBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="등록" />
+
 </LinearLayout>

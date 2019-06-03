@@ -20,12 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".user.ReviewPage"></activity>
-        <activity android:name=".user.AfterSearch" />
-        <activity android:name=".HouseUpdate" />
-        <activity android:name=".user.ReviewUpdate"/>
-        <activity android:name=".HouseRegister" />
-        <activity android:name=".user.ReviewRegister" />
+        <activity android:name=".user.ReviewPage" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".user.AfterSearch" android:parentActivityName=".MainActivity" />
+        <activity android:name=".HouseUpdate" android:parentActivityName=".MainActivity" />
+        <activity android:name=".user.ReviewUpdate" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".HouseRegister" android:parentActivityName=".MainActivity" />
+        <activity android:name=".user.ReviewRegister" android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

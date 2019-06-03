@@ -1,13 +1,17 @@
 package com.example.mainpage;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -15,6 +19,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,10 +32,15 @@ import java.net.URL;
 
 public class HouseUpdate extends AppCompatActivity {
     EditText price, address1, address2, address3, space, comment;
-    Button btn1;
+    Button picBtn, btn1;
     String houseIdx;
     String userMail;
     House house;
+    Boolean picEx= false;
+
+    ImageView img;
+    String path;
+    String fileName1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,30 +54,200 @@ public class HouseUpdate extends AppCompatActivity {
         space = (EditText) findViewById(R.id.space1);
         comment = (EditText) findViewById(R.id.comment1);
         btn1 = (Button) findViewById(R.id.btn1);
+        img = (ImageView) findViewById(R.id.imgView);
+        picBtn = (Button) findViewById(R.id.picRegisterBtn);
 
         house = new House();
 
         Intent intent = getIntent();
         house.setHouseIdx(intent.getExtras().getString("HouseIndex"));
 
+        picBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                house.setHousePic("");
-                house.setHousePrice(price.getText().toString());
-                house.setHouseAddress1(address1.getText().toString());
-                house.setHouseAddress2(address2.getText().toString());
-                house.setHouseAddress3(address3.getText().toString());
-                house.setHouseSpace(space.getText().toString());
-                house.setHouseComment(comment.getText().toString());
+                    house.setHousePrice(price.getText().toString());
+                    house.setHouseAddress1(address1.getText().toString());
+                    house.setHouseAddress2(address2.getText().toString());
+                    house.setHouseAddress3(address3.getText().toString());
+                    house.setHouseSpace(space.getText().toString());
+                    house.setHouseComment(comment.getText().toString());
 
-                userMail = SaveSharedPreference.getUserMail(HouseUpdate.this);
+                    Log.d("data :", house.toString());
 
-                Log.d("data :", house.toString());
+                if(picEx == false){
+                    Toast.makeText(getApplicationContext(), "사진을 넣으십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHousePrice().equals("")){
+                    Toast.makeText(getApplicationContext(), "가격을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress1().equals("")){
+                    Toast.makeText(getApplicationContext(), "주소(도·시)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress2().equals("")){
+                    Toast.makeText(getApplicationContext(), "주소(군·구)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseAddress3().equals("")){
+                    Toast.makeText(getApplicationContext(), "주소(동·읍·면)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else if(house.getHouseSpace().equals("")){
+                    Toast.makeText(getApplicationContext(), "면적(평수)을 입력하십시오", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    fileName1 = path.substring(path.lastIndexOf("/") + 1);
+                    house.setHousePic(fileName1);
+                    userMail = SaveSharedPreference.getUserMail(HouseUpdate.this);
 
-                new ServerConnect1(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
+                    Log.d("fileName :", fileName1);
+
+                    String urlString = "http://13.125.87.255:3000/houseRegisterPic";
+                    DoFileUpload(urlString , path);
+
+                    Log.d("data :", house.toString());
+                }
+
             }
         });
+    }
+
+    public void DoFileUpload(String apiUrl, String absolutePath) {
+        new httpFileUpload(apiUrl, "", absolutePath).execute(apiUrl);
+    }
+
+    String lineEnd = "\r\n";
+    String twoHyphens = "--";
+    String boundary = "*****";
+
+    private class httpFileUpload extends AsyncTask<String, String, String> {
+
+        private String urlString;
+        private String params;
+        private String fileName;
+
+        public httpFileUpload(String urlString, String params, String fileName){
+            this.urlString = urlString;
+            this.params = params;
+            this.fileName = fileName;
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                HttpURLConnection conn = null;
+                BufferedReader reader = null;
+                try{
+                    FileInputStream mFileInputStream = new FileInputStream(fileName);
+                    URL connectUrl = new URL(urlString);
+                    Log.d("Test", "mFileInputStream  is " + mFileInputStream);
+
+                    // open connection
+                    conn = (HttpURLConnection)connectUrl.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setUseCaches(false);
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Connection", "Keep-Alive");
+                    conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                    conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                    conn.setRequestProperty("photo", fileName);
+
+                    // write data
+                    OutputStream outStream = conn.getOutputStream();
+                    DataOutputStream dos = new DataOutputStream(outStream);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"" + fileName+"\"" + lineEnd);
+                    dos.writeBytes(lineEnd);
+
+                    int bytesAvailable = mFileInputStream.available();
+                    int maxBufferSize = 1 * 1024 * 1024;
+                    int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+
+                    Log.d("Test", "image byte is " + bytesRead);
+
+                    // read image
+                    while (bytesRead > 0) {
+                        dos.write(buffer, 0, bufferSize);
+                        bytesAvailable = mFileInputStream.available();
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        bytesRead = mFileInputStream.read(buffer, 0, bufferSize);
+                    }
+
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                    dos.flush(); // finish upload...
+
+                    // close streams
+                    Log.e("Test" , "File is written");
+                    mFileInputStream.close();
+                    dos.close();
+
+                    if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        Log.d("Error", "http response code is " + conn.getResponseCode());
+                        return null;
+                    }
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = conn.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer1 = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer1.append(line);
+                    }
+
+                    return buffer1.toString();
+                } catch (MalformedURLException e){
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if(conn != null){
+                        conn.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.d("Test", "exception " + e.getMessage());
+                // TODO: handle exception
+            }
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //Log.d("postData", result);
+            try {
+                JSONObject postData = new JSONObject(result);
+                if(postData.getString("result").equals("1")) {
+                    new ServerConnect1(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
+                } else {
+                    Toast.makeText(getApplicationContext(), "실패", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public class ServerConnect1 extends AsyncTask<String, String, String> {
@@ -175,11 +356,37 @@ public class HouseUpdate extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "수정 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "집수정 실패", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    Log.d("PATH", (data.getData()).getPath().toString());
+                    Uri uri = data.getData();
+                    path = getPathFromURI(uri);
+                    img.setImageURI(data.getData());
+                    img.setVisibility(View.VISIBLE);
+                    picEx = true;
+                }
+        }
+    }
+
+    public String getPathFromURI(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        startManagingCursor(cursor);
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        Log.d("Path", cursor.getString(columnIndex));
+        return cursor.getString(columnIndex);
     }
 }

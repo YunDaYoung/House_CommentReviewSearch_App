@@ -61,8 +61,9 @@ public class UserMypage extends AppCompatActivity{
         ownerName3 = (TextView) findViewById(R.id.ownerName3);
         user1 = (ScrollView) findViewById(R.id.user);
         Json3.execute(url + SaveSharedPreference.getUserMail(UserMypage.this));
-       // user1.requestDisallowInterceptTouchEvent(true);
+        // user1.requestDisallowInterceptTouchEvent(true);
 
+        ownerName3.setText(SaveSharedPreference.getUserName(UserMypage.this) + "님");
 
 
         reviewPageBtn.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +193,9 @@ public class UserMypage extends AppCompatActivity{
                             jsonObject.getString("userMail")
                     ));
                     Log.d("House" + i + ":", houseList.get(i).toString());
+                    if(houseList.get(i).getHouseIdx() != null){
+                        SaveSharedPreference.setHouseIdxData(UserMypage.this, houseList.get(i).getHouseIdx(), i);
+                    }
                 }
 
                 adapter = new ListViewAdapter(UserMypage.this, R.layout.item, houseList);
