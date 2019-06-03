@@ -34,6 +34,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class UserMypage extends AppCompatActivity{
+
+    TextView reviewHouse;
+
     String url = "http://13.125.87.255:3000/userMypage/";
     ArrayList<House> houseList = new ArrayList<House>();
 
@@ -60,6 +63,17 @@ public class UserMypage extends AppCompatActivity{
         reviewPageBtn = (Button) findViewById(R.id.reviewListButton);
         ownerName3 = (TextView) findViewById(R.id.ownerName3);
         user1 = (ScrollView) findViewById(R.id.user);
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserMypage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         Json3.execute(url + SaveSharedPreference.getUserMail(UserMypage.this));
         // user1.requestDisallowInterceptTouchEvent(true);
 
@@ -198,6 +212,7 @@ public class UserMypage extends AppCompatActivity{
                     }
                 }
 
+
                 adapter = new ListViewAdapter(UserMypage.this, R.layout.item, houseList);
                 listView3.setAdapter(adapter);
                 listView3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -207,6 +222,7 @@ public class UserMypage extends AppCompatActivity{
                         String hIdx = houseList.get(position).getHouseIdx();
                         intent.putExtra("HouseIndex", hIdx);
                         startActivity(intent);
+                        finish();
                     }
                 });
 
@@ -220,5 +236,4 @@ public class UserMypage extends AppCompatActivity{
 
         }
     }
-
 }

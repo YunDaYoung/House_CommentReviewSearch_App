@@ -44,6 +44,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class DetailHousePage extends AppCompatActivity{
+
+    TextView reviewHouse;
+
     String url;
     String idx;
 
@@ -89,6 +92,17 @@ public class DetailHousePage extends AppCompatActivity{
 
         houseDeleteBtn = (Button)findViewById(R.id.houseDeleteBtn) ;
         houseUpdateBtn = (Button)findViewById(R.id.houseUpdateBtn);
+
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailHousePage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         if(SaveSharedPreference.getUserCheck(DetailHousePage.this ).equals("0")){
             for(int i = 0; i < 100; i++) {

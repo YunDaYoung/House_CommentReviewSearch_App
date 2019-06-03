@@ -211,18 +211,20 @@ public class LoginPage extends AppCompatActivity {
                         if(SaveSharedPreference.getUserCheck(LoginPage.this).equals("1")){
                             Intent intent = new Intent(getApplicationContext(), OwnerMypage.class);
                             startActivity(intent);
+                            finish();
 
                         }
                         else {
                             Intent intent = new Intent(getApplicationContext(), UserMypage.class);
                             startActivity(intent);
+                            finish();
                         }
 
 
 
 //                    intent.putExtra("session", user);
 
-                    finish();
+
                 } else {
                     Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                 }

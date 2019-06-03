@@ -33,6 +33,7 @@ import java.util.ArrayList;
 
 public class ReviewPage extends AppCompatActivity {
 
+    TextView reviewHouse;
 
     String url = "http://13.125.87.255:3000/reviewList/";
     ArrayList<Review> reviewList = new ArrayList<Review>();
@@ -56,6 +57,16 @@ public class ReviewPage extends AppCompatActivity {
         rwUserName = (TextView) findViewById(R.id.rwUserName);
         rw = (ScrollView) findViewById(R.id.rw);
         rwText1 = (TextView) findViewById(R.id.rwText1);
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ReviewPage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         rwUserName.setText(SaveSharedPreference.getUserName(ReviewPage.this) + "님");
 

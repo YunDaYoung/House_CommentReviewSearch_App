@@ -29,6 +29,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView reviewHouse;
+
     String url = "http://13.125.87.255:3000/recently";
     ArrayList<House> houseList = new ArrayList<House>();
 
@@ -52,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
         searchButton = (ImageButton) findViewById(R.id.searchButton);
         loginButton = (Button) findViewById(R.id.loginButton);
         joinButton = (Button) findViewById(R.id.joinButton);
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
        if(SaveSharedPreference.getUserName(MainActivity.this).length() != 0){
            if(SaveSharedPreference.getUserCheck(MainActivity.this).equals("1")){

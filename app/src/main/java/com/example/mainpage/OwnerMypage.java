@@ -27,6 +27,8 @@ import java.util.ArrayList;
 
 public class OwnerMypage extends AppCompatActivity {
 
+    TextView reviewHouse;
+
     String url = "http://13.125.87.255:3000/ownerMyPage/";
     ArrayList<House> houseList = new ArrayList<House>();
 
@@ -43,12 +45,22 @@ public class OwnerMypage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.owner_mypage);
 
-
         listView2 = (ListView) findViewById(R.id.listview2);
         logoutButton = (Button) findViewById(R.id.logoutButton2);
         houseRegisterBtn = (Button) findViewById(R.id.houseregiestBtn);
         ownerName = (TextView) findViewById(R.id.ownerName2);
         ow = (ScrollView) findViewById(R.id.ow);
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OwnerMypage.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         Json2.execute(url + SaveSharedPreference.getUserMail(OwnerMypage.this));
         ow.requestDisallowInterceptTouchEvent(true);
 

@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mainpage.DetailHousePage;
@@ -41,6 +42,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class UserListPage extends AppCompatActivity {
+
     String url = "http://13.125.87.255:3000/reviewList";
     Button rwUpdateBtn,rwDeleteBtn;
     ArrayList<Review> reviewList = new ArrayList<Review>();

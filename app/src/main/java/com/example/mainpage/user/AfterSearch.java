@@ -38,6 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class AfterSearch extends AppCompatActivity {
+    TextView reviewHouse;
 
     ArrayList<House> houseList = new ArrayList<House>();
     ArrayList<Review> reviewList = new ArrayList<Review>();
@@ -70,6 +71,16 @@ public class AfterSearch extends AppCompatActivity {
         logoutBtn = (Button) findViewById(R.id.logoutButton0);
         listView = (ListView) findViewById(R.id.listview0);
         userName = (TextView) findViewById(R.id.ownerName0);
+        reviewHouse = (TextView) findViewById(R.id.reviewHouse);
+
+        reviewHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AfterSearch.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         userName.setText(SaveSharedPreference.getUserName(AfterSearch.this) + "님");
 
