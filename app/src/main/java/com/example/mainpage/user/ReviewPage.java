@@ -183,6 +183,7 @@ public class ReviewPage extends AppCompatActivity {
                         String hIdx = reviewList.get(position).getHouse_idx();
                         String rwtext=reviewList.get(position).getUser_review();
                         intent.putExtra("HouseIndex", hIdx);
+                        intent.putExtra("ReviewComment", rwtext);
                         startActivity(intent);
                     }
                 });

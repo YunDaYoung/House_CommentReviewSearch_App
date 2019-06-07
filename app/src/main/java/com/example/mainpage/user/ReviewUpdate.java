@@ -31,7 +31,7 @@ import java.net.URL;
 public class ReviewUpdate extends AppCompatActivity {
     Button rwUpdateBtn,rwDeletBtn;
     EditText reviewComment;
-    String houseIdx;
+    String houseIdx, rwText;
     String userMail;
     Review review;
 
@@ -49,6 +49,9 @@ public class ReviewUpdate extends AppCompatActivity {
         Intent intent=getIntent();
 
         houseIdx = intent.getStringExtra("HouseIndex");
+        rwText = intent.getStringExtra("ReviewComment");
+
+        reviewComment.setText(rwText);
 
         userMail=(SaveSharedPreference.getUserMail(ReviewUpdate.this));
 

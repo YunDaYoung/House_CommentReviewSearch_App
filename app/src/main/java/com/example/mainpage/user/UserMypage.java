@@ -222,7 +222,6 @@ public class UserMypage extends AppCompatActivity{
                         String hIdx = houseList.get(position).getHouseIdx();
                         intent.putExtra("HouseIndex", hIdx);
                         startActivity(intent);
-                        finish();
                     }
                 });
 

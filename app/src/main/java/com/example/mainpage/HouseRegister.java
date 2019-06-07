@@ -338,6 +338,7 @@ public class HouseRegister extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Log.d("recently", result);
 
             try {
                 JSONObject postData = new JSONObject(result);

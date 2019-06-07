@@ -2,6 +2,8 @@ package com.example.mainpage;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.mainpage.user.ReviewAdapter;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +36,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class HouseUpdate extends AppCompatActivity {
+    String pic;
+
     EditText price, address1, address2, address3, space, comment;
     Button picBtn, btn1;
     String houseIdx;
@@ -56,11 +63,23 @@ public class HouseUpdate extends AppCompatActivity {
         btn1 = (Button) findViewById(R.id.btn1);
         img = (ImageView) findViewById(R.id.imgView);
         picBtn = (Button) findViewById(R.id.picRegisterBtn);
+        userMail = SaveSharedPreference.getUserMail(HouseUpdate.this);
 
         house = new House();
 
         Intent intent = getIntent();
+        pic = intent.getExtras().getString("HousePic");
         house.setHouseIdx(intent.getExtras().getString("HouseIndex"));
+        house.setHousePic(pic.substring(pic.lastIndexOf("/") + 1));
+        price.setText(intent.getExtras().getString("HousePrice"));
+        address1.setText(intent.getExtras().getString("HouseAddress1"));
+        address2.setText(intent.getExtras().getString("HouseAddress2"));
+        address3.setText(intent.getExtras().getString("HouseAddress3"));
+        space.setText(intent.getExtras().getString("HouseSpace"));
+        comment.setText(intent.getExtras().getString("HouseComment"));
+
+        img.setVisibility(View.VISIBLE);
+        new DownloadImageTask(img).execute(("http://13.125.87.255:3000/" + pic));
 
         picBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,10 +102,7 @@ public class HouseUpdate extends AppCompatActivity {
 
                     Log.d("data :", house.toString());
 
-                if(picEx == false){
-                    Toast.makeText(getApplicationContext(), "사진을 넣으십시오", Toast.LENGTH_SHORT).show();
-                }
-                else if(house.getHousePrice().equals("")){
+                if(house.getHousePrice().equals("")){
                     Toast.makeText(getApplicationContext(), "가격을 입력하십시오", Toast.LENGTH_SHORT).show();
                 }
                 else if(house.getHouseAddress1().equals("")){
@@ -101,17 +117,18 @@ public class HouseUpdate extends AppCompatActivity {
                 else if(house.getHouseSpace().equals("")){
                     Toast.makeText(getApplicationContext(), "면적(평수)을 입력하십시오", Toast.LENGTH_SHORT).show();
                 }
-                else {
+                else if(picEx == true){
                     fileName1 = path.substring(path.lastIndexOf("/") + 1);
                     house.setHousePic(fileName1);
-                    userMail = SaveSharedPreference.getUserMail(HouseUpdate.this);
 
                     Log.d("fileName :", fileName1);
 
                     String urlString = "http://13.125.87.255:3000/houseRegisterPic";
                     DoFileUpload(urlString , path);
-
+                }
+                else  {
                     Log.d("data :", house.toString());
+                    new ServerConnect1(house).execute("http://13.125.87.255:3000/houseUpdate/" + house.getHouseIdx()); //AsyncTask 시작시킴
                 }
 
             }
@@ -374,7 +391,6 @@ public class HouseUpdate extends AppCompatActivity {
                     Uri uri = data.getData();
                     path = getPathFromURI(uri);
                     img.setImageURI(data.getData());
-                    img.setVisibility(View.VISIBLE);
                     picEx = true;
                 }
         }
@@ -388,5 +404,30 @@ public class HouseUpdate extends AppCompatActivity {
         cursor.moveToFirst();
         Log.d("Path", cursor.getString(columnIndex));
         return cursor.getString(columnIndex);
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            img.setImageBitmap(result);
+        }
     }
 }

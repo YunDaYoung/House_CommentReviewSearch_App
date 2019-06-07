@@ -3,14 +3,11 @@ package com.example.mainpage;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.icu.util.LocaleData;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -23,8 +20,6 @@ import com.example.mainpage.user.Like;
 import com.example.mainpage.user.Review;
 import com.example.mainpage.user.ReviewAdapter;
 import com.example.mainpage.user.ReviewRegister;
-import com.example.mainpage.user.ReviewUpdate;
-import com.example.mainpage.user.UserMypage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -132,7 +127,6 @@ public class DetailHousePage extends AppCompatActivity{
             public void onClick(View v) {
                 String url = "http://13.125.87.255:3000/houseDelete/" + houseIdx;   //인덱스 post로 보내주기
                 Log.d("idx", houseIdx + ":" + url);
-
                 HouseDelete hd = new HouseDelete();
                 hd.execute(url);
 
@@ -144,6 +138,13 @@ public class DetailHousePage extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent2 = new Intent(DetailHousePage.this, HouseUpdate.class);
                 intent2.putExtra("HouseIndex", houseIdx);
+                intent2.putExtra("HousePic", house.getHousePic());
+                intent2.putExtra("HouseAddress1", house.getHouseAddress1());
+                intent2.putExtra("HouseAddress2", house.getHouseAddress2());
+                intent2.putExtra("HouseAddress3", house.getHouseAddress3());
+                intent2.putExtra("HousePrice", house.getHousePrice());
+                intent2.putExtra("HouseSpace", house.getHouseSpace());
+                intent2.putExtra("HouseComment", house.getHouseComment());
                 startActivity(intent2);
             }
         });
@@ -155,8 +156,10 @@ public class DetailHousePage extends AppCompatActivity{
                 goodBtn.setVisibility(View.INVISIBLE);
                 reviewRegistBtn.setVisibility(View.INVISIBLE);
                 if(myHouse == false){
-                    houseDeleteBtn.setVisibility(View.INVISIBLE);
-                    houseUpdateBtn.setVisibility(View.INVISIBLE);
+                    goodBtn.setVisibility(View.GONE);
+                    reviewRegistBtn.setVisibility(View.GONE);
+                    houseDeleteBtn.setVisibility(View.GONE);
+                    houseUpdateBtn.setVisibility(View.GONE);
                 }
 
             }
@@ -169,10 +172,10 @@ public class DetailHousePage extends AppCompatActivity{
         }
 
         if(SaveSharedPreference.getUserName(DetailHousePage.this).length() == 0){
-            goodBtn.setVisibility(View.INVISIBLE);
-            houseDeleteBtn.setVisibility(View.INVISIBLE);
-            houseUpdateBtn.setVisibility(View.INVISIBLE);
-            reviewRegistBtn.setVisibility(View.INVISIBLE);
+            goodBtn.setVisibility(View.GONE);
+            houseDeleteBtn.setVisibility(View.GONE);
+            houseUpdateBtn.setVisibility(View.GONE);
+            reviewRegistBtn.setVisibility(View.GONE);
 
         }
 
@@ -211,7 +214,6 @@ public class DetailHousePage extends AppCompatActivity{
         reviewRegistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String houseIdx=house.getHouseIdx();
                 Log.d("houseIndex",houseIdx);
                 Intent intent = new Intent(DetailHousePage.this, ReviewRegister.class);
@@ -340,10 +342,7 @@ public class DetailHousePage extends AppCompatActivity{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
-
-
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
