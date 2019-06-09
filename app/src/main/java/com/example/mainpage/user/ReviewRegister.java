@@ -148,7 +148,8 @@ public class ReviewRegister extends AppCompatActivity {
             try {
                 JSONObject postData = new JSONObject(result);
                 if(postData.getString("result").equals("1")) {
-                    Intent intent = new Intent(ReviewRegister.this, ReviewPage.class);
+                    Intent intent = new Intent(ReviewRegister.this, DetailHousePage.class);
+                    intent.putExtra("HouseIndex", houseIdx);
                     startActivity(intent);
                     finish();
                 } else {

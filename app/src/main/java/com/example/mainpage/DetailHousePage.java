@@ -146,6 +146,7 @@ public class DetailHousePage extends AppCompatActivity{
                 intent2.putExtra("HouseSpace", house.getHouseSpace());
                 intent2.putExtra("HouseComment", house.getHouseComment());
                 startActivity(intent2);
+                finish();
             }
         });
 
@@ -558,6 +559,14 @@ public class DetailHousePage extends AppCompatActivity{
             }
 
         }
+    }
+
+    public void onBackPressed() {
+        if(SaveSharedPreference.getUserMail(DetailHousePage.this).length() != 0){
+            Intent intent = new Intent(DetailHousePage.this, MainActivity.class);
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 
 }

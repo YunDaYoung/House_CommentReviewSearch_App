@@ -42,8 +42,10 @@ public class ReviewAdapter extends BaseAdapter {
             convertView=inflater.inflate(layout,parent,false);
         }
         Review review = data.get(position);
-        TextView text1=(TextView)convertView.findViewById(R.id.rwText1);
-        text1.setText("리뷰 내용 : " + review.getUser_review());
+        TextView text1 = (TextView)convertView.findViewById(R.id.rwUserMail);
+        text1.setText("사용자이메일 : " + review.getUser_mail());
+        TextView text2=(TextView)convertView.findViewById(R.id.rwText1);
+        text2.setText("리뷰 내용 : " + review.getUser_review());
 
 
         return convertView;

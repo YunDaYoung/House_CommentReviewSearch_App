@@ -185,33 +185,34 @@ public class UserMypage extends AppCompatActivity{
         @Override
         public void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Log.d("recently", result);
+            Log.d("recently", result);
             try {
                 JSONObject getKey= new JSONObject(result);
 
                 //Log.d("jsonObject: ", getKey.getString("data").toString());
+                if (getKey.getString("result").equals("0")){}
 
-
-                JSONArray jsonArray = new JSONArray(getKey.getString("data2").toString());
-                for(int i =0; i< jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    houseList.add(new House(
-                            jsonObject.getString("houseIdx"),
-                            jsonObject.getString("housePic"),
-                            jsonObject.getString("housePrice"),
-                            jsonObject.getString("houseSpace"),
-                            jsonObject.getString("houseComment"),
-                            jsonObject.getString("houseAddress1"),
-                            jsonObject.getString("houseAddress2"),
-                            jsonObject.getString("houseAddress3"),
-                            jsonObject.getString("userMail")
-                    ));
-                    Log.d("House" + i + ":", houseList.get(i).toString());
-                    if(houseList.get(i).getHouseIdx() != null){
-                        SaveSharedPreference.setHouseIdxData(UserMypage.this, houseList.get(i).getHouseIdx(), i);
+                else {
+                    JSONArray jsonArray = new JSONArray(getKey.getString("data2").toString());
+                    for(int i =0; i< jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        houseList.add(new House(
+                                jsonObject.getString("houseIdx"),
+                                jsonObject.getString("housePic"),
+                                jsonObject.getString("housePrice"),
+                                jsonObject.getString("houseSpace"),
+                                jsonObject.getString("houseComment"),
+                                jsonObject.getString("houseAddress1"),
+                                jsonObject.getString("houseAddress2"),
+                                jsonObject.getString("houseAddress3"),
+                                jsonObject.getString("userMail")
+                        ));
+                        Log.d("House" + i + ":", houseList.get(i).toString());
+                        if(houseList.get(i).getHouseIdx() != null){
+                            SaveSharedPreference.setHouseIdxData(UserMypage.this, houseList.get(i).getHouseIdx(), i);
+                        }
                     }
                 }
-
 
                 adapter = new ListViewAdapter(UserMypage.this, R.layout.item, houseList);
                 listView3.setAdapter(adapter);

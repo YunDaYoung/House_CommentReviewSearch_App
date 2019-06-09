@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                loginButton.setText("마이페이지");
                joinButton.setVisibility(View.INVISIBLE);
                searchButton.setVisibility(View.INVISIBLE);
-
            }
            else{
                loginButton.setText("마이페이지");

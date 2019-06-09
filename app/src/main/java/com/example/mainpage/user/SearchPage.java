@@ -21,6 +21,7 @@ import com.example.mainpage.ListViewAdapter;
 import com.example.mainpage.LoginPage;
 import com.example.mainpage.MainActivity;
 import com.example.mainpage.R;
+import com.example.mainpage.SaveSharedPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -222,6 +223,15 @@ public class SearchPage extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SaveSharedPreference.getUserMail(SearchPage.this).length() != 0) {
+            Intent intent = new Intent(SearchPage.this, MainActivity.class);
+            startActivity(intent);
+        }
+        super.onBackPressed();
     }
 
 }

@@ -88,7 +88,7 @@ public class ReviewPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (SaveSharedPreference.getUserMail(ReviewPage.this).length() != 0) {
-            Intent intent = new Intent(ReviewPage.this, MainActivity.class);
+            Intent intent = new Intent(ReviewPage.this, UserMypage.class);
             startActivity(intent);
         }
         super.onBackPressed();
