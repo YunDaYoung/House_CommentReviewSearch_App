@@ -220,7 +220,7 @@ public class DetailHousePage extends AppCompatActivity{
                 Intent intent = new Intent(DetailHousePage.this, ReviewRegister.class);
                 intent.putExtra("HouseIndex",houseIdx);
                 startActivity(intent);
-
+                finish();
             }
         });
 

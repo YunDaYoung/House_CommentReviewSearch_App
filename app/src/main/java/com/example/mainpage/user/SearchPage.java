@@ -202,21 +202,30 @@ public class SearchPage extends AppCompatActivity {
                 else if (search.getAddress3().equals("")) {
                     Toast.makeText(getApplicationContext(), "주소(군·구)을 입력하십시오", Toast.LENGTH_SHORT).show();
                 }
-                else if (search.getSearchword().equals("")){
-                    Toast.makeText(getApplicationContext(), "리뷰조건항목을 입력하십시오", Toast.LENGTH_SHORT).show();
-                }
                 else {
                     Intent intent = new Intent(SearchPage.this, AfterSearch.class);
-
                     Log.d("search", search.toString());
-                    intent.putExtra("address1", search.getAddress1());
-                    intent.putExtra("address2", search.getAddress2());
-                    intent.putExtra("address3", search.getAddress3());
-                    intent.putExtra("price1", search.getPrice1());
-                    intent.putExtra("area1", search.getArea1());
-                    intent.putExtra("price2", search.getPrice2());
-                    intent.putExtra("area2", search.getArea2());
-                    intent.putExtra("reviewSearch", search.getSearchword());
+                    if(search.getSearchword().equals("")){
+                        intent.putExtra("address1", search.getAddress1());
+                        intent.putExtra("address2", search.getAddress2());
+                        intent.putExtra("address3", search.getAddress3());
+                        intent.putExtra("price1", search.getPrice1());
+                        intent.putExtra("area1", search.getArea1());
+                        intent.putExtra("price2", search.getPrice2());
+                        intent.putExtra("area2", search.getArea2());
+                        intent.putExtra("reviewExist", "0");
+                    }
+                    else{
+                        intent.putExtra("address1", search.getAddress1());
+                        intent.putExtra("address2", search.getAddress2());
+                        intent.putExtra("address3", search.getAddress3());
+                        intent.putExtra("price1", search.getPrice1());
+                        intent.putExtra("area1", search.getArea1());
+                        intent.putExtra("price2", search.getPrice2());
+                        intent.putExtra("area2", search.getArea2());
+                        intent.putExtra("reviewSearch", search.getSearchword());
+                        intent.putExtra("reviewExist", "1");
+                    }
 
                     startActivity(intent);
                 }

@@ -42,6 +42,10 @@ public class ListViewAdapter extends BaseAdapter {
         this.layout=layout;
         reviewExist = true;
     }
+
+    public void setReviewExist(boolean reviewExist){
+        this.reviewExist = reviewExist;
+    }
     @Override
     public int getCount(){return data.size();}
 
