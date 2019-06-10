@@ -561,12 +561,12 @@ public class DetailHousePage extends AppCompatActivity{
         }
     }
 
-    public void onBackPressed() {
+/*    public void onBackPressed() {
         if(SaveSharedPreference.getUserMail(DetailHousePage.this).length() != 0){
             Intent intent = new Intent(DetailHousePage.this, MainActivity.class);
             startActivity(intent);
         }
         super.onBackPressed();
-    }
+    }*/
 
 }

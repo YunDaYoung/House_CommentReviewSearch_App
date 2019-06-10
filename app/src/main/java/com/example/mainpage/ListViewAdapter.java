@@ -81,7 +81,7 @@ public class ListViewAdapter extends BaseAdapter {
         TextView name1=(TextView)convertView.findViewById(R.id.text1);
         name1.setText("가격 : " + house.getHousePrice());
         TextView name2=(TextView)convertView.findViewById(R.id.text2);
-        name2.setText("면적 : " +house.getHouseSpace());
+        name2.setText("면적 : " + house.getHouseSpace());
         TextView name3=(TextView)convertView.findViewById(R.id.text3);
         name3.setText("주소 : " + house.getHouseAddress1()+" "+house.getHouseAddress2()+" "+house.getHouseAddress3());
         TextView name4=(TextView)convertView.findViewById(R.id.text4);
